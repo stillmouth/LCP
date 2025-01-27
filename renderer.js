@@ -156,3 +156,4 @@ function updateBillTotal() {
         totalElement.textContent = `Total: $${totalAmount.toFixed(2)}`;
     }
 }
+updateMainContent('Home'); // Display the default Home page content when application is opened.
