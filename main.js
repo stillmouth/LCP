@@ -1,3 +1,4 @@
+// i add this comment line to test git
 const { app, BrowserWindow, Menu, ipcMain } = require("electron");
 const path = require("path");
 const sqlite3 = require("sqlite3").verbose();
