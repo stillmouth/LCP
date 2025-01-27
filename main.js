@@ -1,10 +1,10 @@
-// i add this comment line to test git
+
 const { app, BrowserWindow, Menu, ipcMain } = require("electron");
 const path = require("path");
 const sqlite3 = require("sqlite3").verbose();
 
 let mainWindow;
-//Reevan added this lmao
+
 // Connect to the SQLite database
 const db = new sqlite3.Database('LC.db', (err) => {
     if (err) {
@@ -32,7 +32,9 @@ app.on("ready", () => {
     });
 
     Menu.setApplicationMenu(null);
-    mainWindow.loadFile('index.html');
+    mainWindow.loadFile('index.html').catch(err => {
+        console.error("Failed to load index.html:", err);
+    });
 
     mainWindow.on("closed", () => {
         mainWindow = null;
@@ -72,9 +74,12 @@ app.on("activate", () => {
             width: 1200,
             height: 800,
             webPreferences: {
-                nodeIntegration: true,
-            },
+                preload: path.join(__dirname, 'preload.js'),
+                contextIsolation: true,
+            }
         });
-        mainWindow.loadFile('index.html');
+        mainWindow.loadFile('index.html').catch(err => {
+            console.error("Failed to load index.html:", err);
+        });
     }
 });
