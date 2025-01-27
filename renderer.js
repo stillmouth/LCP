@@ -1,7 +1,6 @@
 const { ipcRenderer } = require('electron');
 
-
-//FUNCTION to display the item values in the DATABASE
+// Function to display the item values in the database
 function createTableContent(rows, category) {
     return `
         <h2>${category}</h2>
@@ -41,14 +40,18 @@ function createTableContent(rows, category) {
         </table>
     `;
 }
+
 // Function to handle category button clicks
 function updateMainContent(contentType) {
     const mainContent = document.getElementById("main-content");
+    const billPanel = document.getElementById("bill-panel");
 
+    // Show or hide the bill panel based on the category selected
     if (contentType === 'Burgers') {
         // Fetch burger items from the database
         ipcRenderer.invoke('fetch-burgers').then((rows) => {
             mainContent.innerHTML = createTableContent(rows, 'Burgers');
+            billPanel.style.display = 'block'; // Show bill panel
         }).catch((err) => {
             console.error("Error fetching burgers data:", err.message);
         });
@@ -56,6 +59,7 @@ function updateMainContent(contentType) {
         // Fetch milkshakes items from the database
         ipcRenderer.invoke('fetch-milkshakes').then((rows) => {
             mainContent.innerHTML = createTableContent(rows, 'Milkshakes');
+            billPanel.style.display = 'block'; // Show bill panel
         }).catch((err) => {
             console.error("Error fetching milkshakes data:", err.message);
         });
@@ -64,26 +68,20 @@ function updateMainContent(contentType) {
             <h2>Ice Creams</h2>
             <p>This is the content for Ice Creams. SHOW ALL THE ITEMS IN ICECREAMS</p>
         `;
+        billPanel.style.display = 'block'; // Show bill panel
     } else if (contentType === 'Home') {
         mainContent.innerHTML = `
             <h2>Home</h2>
-            <p>SUPPOSED TO SHOW THE DEFAULT HOME PAGE HERE IDK HOW</p>
+            <p>Welcome to the default home page!</p>
         `;
-    } else if (contentType === 'Menu') {
+        billPanel.style.display = 'none'; // Hide bill panel on Home page
+    } else {
+        // For Menu, Analytics, History (hide bill panel)
         mainContent.innerHTML = `
-            <h2>MENU</h2>
-            <p>MENU SHOWING MENU ITEMS AND EDITING/UPDATING THEM</p>
+            <h2>${contentType}</h2>
+            <p>Content for ${contentType}</p>
         `;
-    } else if (contentType === 'Analytics') {
-        mainContent.innerHTML = `
-            <h2>ANALYTICS</h2>
-            <p>ANALYTICS OF THE PAST SALES.ETC AND EVERYTHING ELSE</p>
-        `;
-    } else if (contentType === 'History') {
-        mainContent.innerHTML = `
-            <h2>HISTORY</h2>
-            <p>HISTORY OF ALL THE TRANSACTIONS WILL BE SHOWN HERE</p>
-        `;
+        billPanel.style.display = 'none'; // Hide bill panel for other pages
     }
 }
 
@@ -97,33 +95,22 @@ function changeQuantity(itemId, change) {
 
 // Add an item to the bill
 function addToBill(itemId, itemName, price) {
-    // Get the selected quantity for the item
     const quantity = parseInt(document.getElementById(`quantity-${itemId}`).value);
-
-    // Only add the item if the quantity is greater than 0
     if (quantity > 0) {
-        // Calculate the total price for the item (price * quantity)
         const totalPrice = price * quantity;
-
-        // Find the bill panel and add the new item
         const billPanel = document.getElementById("bill-panel");
 
-        // Check if the item already exists in the bill
         let existingItem = document.getElementById(`bill-item-${itemId}`);
         if (existingItem) {
-            // If the item already exists, update the quantity and total price
             const quantityCell = existingItem.querySelector(".bill-quantity");
             const totalPriceCell = existingItem.querySelector(".bill-total");
-            
             let newQuantity = parseInt(quantityCell.textContent) + quantity;
             quantityCell.textContent = newQuantity;
             totalPriceCell.textContent = (price * newQuantity).toFixed(2);
         } else {
-            // If the item doesn't exist in the bill, create a new row
             const billItemRow = document.createElement("div");
             billItemRow.classList.add("bill-item");
             billItemRow.id = `bill-item-${itemId}`;
-
             billItemRow.innerHTML = `
                 <span class="bill-item-name">${itemName}</span>
                 <span class="bill-quantity">${quantity}</span>
@@ -133,12 +120,9 @@ function addToBill(itemId, itemName, price) {
                 <span class="bill-total">${totalPrice.toFixed(2)}</span>
                 <button onclick="removeFromBill('${itemId}')">Remove</button>
             `;
-
-            // Append the new item to the bill panel
             billPanel.appendChild(billItemRow);
         }
 
-        // Update the total price of the bill
         updateBillTotal();
     } else {
         alert('Please select a quantity greater than 0 to add to the bill.');
@@ -159,18 +143,16 @@ function updateBillTotal() {
     const billPanel = document.getElementById("bill-panel");
     let totalAmount = 0;
 
-    // Loop through all items in the bill panel and calculate the total amount
     const billItems = billPanel.getElementsByClassName("bill-item");
     for (let item of billItems) {
         const totalPrice = parseFloat(item.querySelector(".bill-total").textContent);
         totalAmount += totalPrice;
     }
 
-    // Display message if no items are in the bill
     const totalElement = document.getElementById("total-amount");
     if (billItems.length === 0) {
         totalElement.textContent = 'Total: $0.00 (Your bill is empty)';
     } else {
         totalElement.textContent = `Total: $${totalAmount.toFixed(2)}`;
     }
-}lElement.textContent = `Total: $${totalAmount.toFixed(2)}`;
+}

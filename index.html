@@ -12,7 +12,7 @@
     <button class="top" id="Home" onclick="updateMainContent('Home')">Home</button>
     <button class="top" id="Menu" onclick="updateMainContent('Menu')">Menu</button>
     <button class="top" id="Analytics" onclick="updateMainContent('Analytics')">Analytics</button>
-    <button class="top" id="Analytics" onclick="updateMainContent('History')">History</button>
+    <button class="top" id="History" onclick="updateMainContent('History')">History</button>
   </div>
 
   <!-- Main Content -->
@@ -31,15 +31,16 @@
     </div>
 
     <!-- Bill Panel (Right Side) -->
-    <!-- Bill Panel (Right Side) -->
-<div id="bill-panel">
-  <h3>Bill</h3>
-  <div id="bill-items-list">
-      <!-- Items will be dynamically added here -->
+    <div id="bill-panel">
+      <h3>Bill</h3>
+      <div id="bill-items-list">
+          <!-- Items will be dynamically added here -->
+      </div>
+      <hr>
+      <div id="total-amount">Total: $0.00</div>
+    </div>
+
   </div>
-  <hr>
-  <div id="total-amount">Total: $0.00</div>
-</div>
 
   <script src="renderer.js"></script>
 </body>
