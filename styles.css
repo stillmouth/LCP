@@ -1,0 +1,179 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Top Horizontal Panel */
+#top-panel {
+    background-color: #333;
+    color: white;
+    display: flex;
+    justify-content: space-evenly; /* Space buttons evenly */
+    align-items: stretch;
+    height: 50px; /* Adjust the height of the panel */
+}
+
+.top {
+    flex: 1;
+    padding: 10px 20px;
+    background-color: #444;
+    color: white;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.top:hover {
+    background-color: #555;
+}
+
+/* Container for left and main panels */
+#content {
+    display: flex;
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+/* Left Vertical Panel */
+#category-panel {
+    background-color: #f4f4f4;
+    width: 200px;
+    padding: 10px;
+    border-right: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+}
+
+.category {
+    width: 100%;
+    padding: 10px;
+    background-color: #ddd;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    transition: background-color 0.3s ease;
+}
+
+.category:hover {
+    background-color: #ccc;
+}
+
+/* Main Content Area */
+#main-content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    background-color: #fff;
+    justify-content: space-evenly;
+}
+
+/* Bill Panel (Right Side) */
+#bill-panel {
+    width: 600px; /* Change this value to your desired width */
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-left: 20px;
+    overflow-y: auto;
+    max-height: 500px;
+}
+
+#bill-panel h3 {
+    margin-top: 0;
+}
+
+/* Add separation line between main content and bill panel */
+#content > #main-content {
+    border-right: 2px solid #ddd; /* Border line between the content and bill panel */
+}
+
+.bill-item {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 10px;
+    align-items: center;
+}
+
+.bill-item-name {
+    font-weight: bold;
+}
+
+.bill-quantity, .bill-price, .bill-total {
+    margin: 0 5px;
+}
+
+.bill-item button {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 5px 10px;
+    font-size: 14px;
+    border-radius: 5px;
+}
+
+.bill-item button:hover {
+    background-color: #d32f2f;
+}
+
+#total-amount {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 20px;
+    text-align: right;
+}
+
+/* Basic styling for buttons */
+button:focus {
+    outline: none;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+/* Basic styling for the quantity buttons and input */
+.quantity-btn {
+    background-color: #f4f4f4;
+    border: 1px solid #ddd;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: background-color 0.3s ease;
+}
+
+.quantity-btn:hover {
+    background-color: #ddd;
+}
+
+input[type="number"] {
+    width: 50px;
+    text-align: center;
+    font-size: 16px;
+    padding: 5px;
+    border: 1px solid #ddd;
+    margin: 0 10px;
+}

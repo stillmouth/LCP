@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lassi Corner Billing System</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Top Horizontal Panel -->
+  <div id="top-panel">
+    <button class="top" id="Home" onclick="updateMainContent('Home')">Home</button>
+    <button class="top" id="Menu" onclick="updateMainContent('Menu')">Menu</button>
+    <button class="top" id="Analytics" onclick="updateMainContent('Analytics')">Analytics</button>
+    <button class="top" id="Analytics" onclick="updateMainContent('History')">History</button>
+  </div>
+
+  <!-- Main Content -->
+  <div id="content">
+    <!-- Left Vertical Panel -->
+    <div id="category-panel">
+      <button class="category" id="Burgers" onclick="updateMainContent('Burgers')">Burger</button>
+      <button class="category" id="Milkshakes" onclick="updateMainContent('Milkshakes')">Milkshakes</button>
+      <button class="category" id="Icecreams" onclick="updateMainContent('Icecreams')">Ice Creams</button>
+    </div>
+
+    <!-- Main Content Area -->
+    <div id="main-content">
+      <h2>Welcome to LASSI CORNER!</h2>
+      <p>This is the main content area. Customize it as you like.</p>
+    </div>
+
+    <!-- Bill Panel (Right Side) -->
+    <!-- Bill Panel (Right Side) -->
+<div id="bill-panel">
+  <h3>Bill</h3>
+  <div id="bill-items-list">
+      <!-- Items will be dynamically added here -->
+  </div>
+  <hr>
+  <div id="total-amount">Total: $0.00</div>
+</div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>
