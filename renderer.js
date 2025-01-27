@@ -59,10 +59,35 @@ function updateMainContent(contentType) {
         }).catch((err) => {
             console.error("Error fetching milkshakes data:", err.message);
         });
-    } else if (contentType === 'Icecreams') {
+    } else if (contentType === 'Momos') {
         mainContent.innerHTML = `
-            <h2>Ice Creams</h2>
-            <p>This is the content for Ice Creams. SHOW ALL THE ITEMS IN ICECREAMS</p>
+            <h2>MOMOS</h2>
+            <p>MOMOS</p>
+        `;
+    } else if (contentType === 'Wraps') {
+        mainContent.innerHTML = `
+            <h2>WRAPS</h2>
+            <p>WRAPS</p>
+        `;
+    } else if (contentType === 'Pops') {
+        mainContent.innerHTML = `
+            <h2>POPS</h2>
+            <p>POPS</p>
+        `;
+    } else if (contentType === 'Fries') {
+        mainContent.innerHTML = `
+            <h2>FRIES</h2>
+            <p>FRIES</p>
+        `;
+    } else if (contentType === 'Cold Coffee') {
+        mainContent.innerHTML = `
+            <h2>COLD COFFEE</h2>
+            <p>COLD COFFEE</p>
+        `;
+    } else if (contentType === 'Lassi') {
+        mainContent.innerHTML = `
+            <h2>LASSI</h2>
+            <p>LASSI</p>
         `;
     } else if (contentType === 'Home') {
         mainContent.innerHTML = `
@@ -84,7 +109,58 @@ function updateMainContent(contentType) {
             <h2>HISTORY</h2>
             <p>HISTORY OF ALL THE TRANSACTIONS WILL BE SHOWN HERE</p>
         `;
+    } else if (contentType === 'Settings') {
+        mainContent.innerHTML = `
+            <h2>SETTINGS</h2>
+            <p>USER PROFILE, THEME etc...</p>
+        `;
+    }else if (contentType === 'AddItem') {
+        mainContent.innerHTML = `
+            <h2>This is where item can be added to the menu</h2>
+            <p>Add an item here</p>
+        `;
+    } else if (contentType === 'UpdateItem') {
+        mainContent.innerHTML = `
+            <h2>Edit an item in the menu</h2>
+            <p>EDIT AN ITEM</p>
+        `;
+    } else if (contentType === 'DeleteItem') {
+        mainContent.innerHTML = `
+            <h2>Delete an item from the menu</h2>
+            <p>DELETE AN ITEM</p>
+        `;
+    } else if (contentType === 'SalesOverview') {
+        mainContent.innerHTML = `
+            <h2>Daily, weekly, monthly sales revealed here</h2>
+            <p>over view sales</p>
+        `;
+    } else if (contentType === 'TopSelling') {
+        mainContent.innerHTML = `
+            <h2>TOP SELLING</h2>
+            <p>DELETE AN ITEM</p>
+        `;
+    } else if (contentType === 'Trends') {
+        mainContent.innerHTML = `
+            <h2>TRENDS</h2>
+            <p>DELETE AN ITEM</p>
+        `;
+    } else if (contentType === 'OrderHistory') {
+        mainContent.innerHTML = `
+            <h2>ORDER HISTORY</h2>
+            <p>DELETE AN ITEM</p>
+        `;
+    } else if (contentType === 'UserProfile') {
+        mainContent.innerHTML = `
+            <h2>USER PROFILE</h2>
+            <p>DELETE AN ITEM</p>
+        `;
+    } else if (contentType === 'ThemeToggle') {
+        mainContent.innerHTML = `
+            <h2>THEME TOGGLE</h2>
+            <p>DELETE AN ITEM</p>
+        `;
     }
+    updateLeftPanel(contentType);
 }
 
 // Change the quantity for a specific item
@@ -174,3 +250,48 @@ function updateBillTotal() {
         totalElement.textContent = `Total: $${totalAmount.toFixed(2)}`;
     }
 }lElement.textContent = `Total: $${totalAmount.toFixed(2)}`;
+
+
+// Function to dynamically update the left panel (category or settings buttons)
+function updateLeftPanel(contentType) {
+    const categoryPanel = document.getElementById("category-panel");
+  
+    if (contentType === "Home") {
+      // Render Home-related buttons
+      categoryPanel.innerHTML = `
+        <button class="category" id="Burgers" onclick="updateMainContent('Burgers')">Burger</button>
+        <button class="category" id="Milkshakes" onclick="updateMainContent('Milkshakes')">Milkshakes</button>
+        <button class="category" id="Momos" onclick="updateMainContent('Momos')">Momos</button>
+        <button class="category" id="Wraps" onclick="updateMainContent('Wraps')">Wraps</button>
+        <button class="category" id="Pops" onclick="updateMainContent('Pops')">Pops</button>
+        <button class="category" id="Fries" onclick="updateMainContent('Fries')">Fries</button>
+        <button class="category" id="Cold Coffee" onclick="updateMainContent('Cold Coffee')">Cold Coffee</button>
+        <button class="category" id="Lassi" onclick="updateMainContent('Lassi')">Lassi</button>
+      `;
+    } else if (contentType === "Menu") {
+      // Render Menu-related buttons
+      categoryPanel.innerHTML = `
+        <button class="category" id="AddItem" onclick="updateMainContent('AddItem')">Add Item</button>
+        <button class="category" id="UpdateItem" onclick="updateMainContent('UpdateItem')">Update Item</button>
+        <button class="category" id="DeleteItem" onclick="updateMainContent('DeleteItem')">Delete Item</button>
+      `;
+    } else if (contentType === "Analytics") {
+      // Render Analytics-related buttons
+      categoryPanel.innerHTML = `
+        <button class="category" id="SalesOverview" onclick="updateMainContent('SalesOverview')">Sales Overview</button>
+        <button class="category" id="TopSelling" onclick="updateMainContent('TopSelling')">Top Selling</button>
+        <button class="category" id="Trends" onclick="updateMainContent('Trends')">Trends</button>
+      `;
+    } else if (contentType === "History") {
+      // Render History-related buttons
+      categoryPanel.innerHTML = `
+        <button class="category" id="OrderHistory" onclick="updateMainContent('OrderHistory')">Order History</button>
+      `;
+    } else if (contentType === "Settings") {
+      // Render Settings-related buttons
+      categoryPanel.innerHTML = `
+        <button class="category" id="UserProfile" onclick="updateMainContent('UserProfile')">User Profile</button>
+        <button class="category" id="ThemeToggle" onclick="updateMainContent('ThemeToggle')">Light/Dark Mode</button>
+      `;
+    } 
+  }
