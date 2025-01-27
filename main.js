@@ -3,7 +3,7 @@ const path = require("path");
 const sqlite3 = require("sqlite3").verbose();
 
 let mainWindow;
-
+//Reevan added this lmao
 // Connect to the SQLite database
 const db = new sqlite3.Database('LC.db', (err) => {
     if (err) {
