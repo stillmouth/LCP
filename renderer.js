@@ -1,5 +1,16 @@
 const { ipcRenderer } = require('electron');
 
+
+
+// Function for hiding buttons for staff.
+async function hideButtons() {
+    const userRole = await ipcRenderer.invoke('get-user-role');
+    if (userRole === 'staff') {
+        document.getElementById('Analytics').style.display = 'none';
+        document.getElementById('History').style.display = 'none';
+    }
+}
+hideButtons();
 // Function to display the item values in the database
 function createTableContent(rows, category) {
     return `
