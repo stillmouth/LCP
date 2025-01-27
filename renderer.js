@@ -107,7 +107,8 @@ function updateMainContent(contentType) {
             <p>Content for ${contentType}</p>
         `;
         billPanel.style.display = 'none'; // Hide bill panel for other pages
-    } else if (contentType === 'Settings') {
+    } 
+    if (contentType === 'Settings') {
         mainContent.innerHTML = `
             <h2>SETTINGS</h2>
             <p>USER PROFILE, THEME etc...</p>
