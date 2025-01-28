@@ -1,51 +1,75 @@
-
 const { app, BrowserWindow, Menu, ipcMain } = require("electron");
 const path = require("path");
 const sqlite3 = require("sqlite3").verbose();
 
 let mainWindow;
-let userRole = "admin";
+let userRole = null;
 
-ipcMain.handle('get-user-role', async () => {
-    return userRole;
+// Handle login logic and return user role
+ipcMain.handle('login', (event, password) => {
+    if (password === '1212') {
+        userRole = 'admin'; // Set role for admin
+    } else if (password === '1000') {
+        userRole = 'staff'; // Set role for staff
+    } else {
+        userRole = null; // Invalid password
+    }
+    return userRole; // Return the role (or null if invalid)
 });
+
 // Connect to the SQLite database
 const db = new sqlite3.Database('LC.db', (err) => {
     if (err) {
         console.error("Failed to connect to the database:", err.message);
     } else {
         console.log("Connected to the SQLite database.");
-    }
+        }
 });
 
 app.on("ready", () => {
     mainWindow = new BrowserWindow({
         width: 1200,
         height: 800,
-        show: false,
+        show: false, // Initially hidden until ready-to-show
         webPreferences: {
-            nodeIntegration: true,
-            contextIsolation: false, // Enable Node.js in the renderer process
+            nodeIntegration: true, // Allow Node.js in the renderer process
+            contextIsolation: false, // Optional: enable or disable context isolation
         },
     });
 
+    // Maximize the window after creation
     mainWindow.maximize();
 
+    // Show window once it's ready
     mainWindow.once("ready-to-show", () => {
         mainWindow.show();
     });
 
     Menu.setApplicationMenu(null);
-    mainWindow.loadFile('index.html').catch(err => {
-        console.error("Failed to load index.html:", err);
+
+    // Load login page first
+    mainWindow.loadFile('login.html').catch(err => {
+        console.error("Failed to load login.html:", err);
     });
 
-    mainWindow.on("closed", () => {
-        mainWindow = null;
-        db.close(); // Close the database connection when the app is closed
+    // Handle the user role request
+    ipcMain.handle('get-user-role', async () => {
+        return userRole;
     });
 
-    // Handle the Burgers button request from the renderer
+    // After successful login, redirect to index.html
+    ipcMain.handle('login-success', async () => {
+        if (userRole === 'admin' || userRole === 'staff') {
+            mainWindow.loadFile('index.html').then(() => {
+                mainWindow.webContents.send('set-user-role', userRole); // Send the user role after loading index.html
+            }).catch(err => {
+                console.error("Failed to load index.html:", err);
+            });
+        }
+    });
+    
+
+    // Handle database queries
     ipcMain.handle('fetch-burgers', async () => {
         return new Promise((resolve, reject) => {
             db.all('SELECT * FROM MENU WHERE CATEGORY = "BURGERS"', [], (err, rows) => {
@@ -58,6 +82,7 @@ app.on("ready", () => {
             });
         });
     });
+
     ipcMain.handle('fetch-milkshakes', async () => {
         return new Promise((resolve, reject) => {
             db.all('SELECT * FROM MENU WHERE CATEGORY = "MILKSHAKES"', [], (err, rows) => {
@@ -82,8 +107,9 @@ app.on("activate", () => {
                 contextIsolation: true,
             }
         });
-        mainWindow.loadFile('index.html').catch(err => {
-            console.error("Failed to load index.html:", err);
+
+        mainWindow.loadFile('login.html').catch(err => {
+            console.error("Failed to load login.html:", err);
         });
     }
 });

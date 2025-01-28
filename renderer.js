@@ -1,16 +1,48 @@
 const { ipcRenderer } = require('electron');
 
-
-
-// Function for hiding buttons for staff.
-async function hideButtons() {
-    const userRole = await ipcRenderer.invoke('get-user-role');
-    if (userRole === 'staff') {
-        document.getElementById('Analytics').style.display = 'none';
-        document.getElementById('History').style.display = 'none';
+// Listen for the 'set-user-role' message from the main process
+ipcRenderer.on('set-user-role', (event, role) => {
+    const content = document.getElementById('content'); // Assuming this is the main container
+    if (content) {
+        content.classList.add('fade-in');
+        console.log(`Received role: ${role}`);
+        const billPanel = document.getElementById("bill-panel");
+        billPanel.style.display = 'none';
+        if (role === 'staff') {
+            console.log("Hiding buttons for staff via 'set-user-role'");
+            document.getElementById('Analytics').style.display = 'none';
+            document.getElementById('History').style.display = 'none';
+        }
     }
-}
-hideButtons();
+});
+
+
+// Handle login form submission (for login.html)
+document.addEventListener('DOMContentLoaded', () => {
+    // Ensure this runs only in login.html context
+    const loginButton = document.getElementById('login-btn');
+    if (loginButton) {
+        loginButton.addEventListener('click', () => {
+            const password = document.getElementById('password').value;
+
+            // Send the password to the main process for validation
+            ipcRenderer.invoke('login', password)
+                .then(userRole => {
+                    if (userRole === 'admin' || userRole === 'staff') {
+                        ipcRenderer.invoke('login-success'); // Trigger index.html to load
+                    } else {
+                        // Show the error message if the password is incorrect
+                        document.getElementById('error-message').style.display = 'block';
+                    }
+                })
+                .catch(err => {
+                    console.error('Error:', err);
+                });
+        });
+    }
+});
+
+
 // Function to display the item values in the database
 function createTableContent(rows, category) {
     return `
@@ -110,7 +142,7 @@ function updateMainContent(contentType) {
             <h2>Home</h2>
             <p>Welcome to the default home page!</p>
         `;
-        billPanel.style.display = 'none'; // Hide bill panel on Home page
+        billPanel.style.display = 'block'; // Hide bill panel on Home page
     } else {
         // For Menu, Analytics, History (hide bill panel)
         mainContent.innerHTML = `
