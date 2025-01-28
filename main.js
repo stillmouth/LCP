@@ -4,7 +4,7 @@ const path = require("path");
 const sqlite3 = require("sqlite3").verbose();
 
 let mainWindow;
-let userRole = "staff";
+let userRole = "admin";
 
 ipcMain.handle('get-user-role', async () => {
     return userRole;
