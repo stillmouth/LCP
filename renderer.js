@@ -257,7 +257,68 @@ function removeFromBill(itemId) {
     }
 }
 
-// Function to update the total amount of the bill
+// Function to apply the discount
+function applyDiscount() {
+    const discountPercentage = parseFloat(document.getElementById("discount-percentage").value);
+    const discountAmount = parseFloat(document.getElementById("discount-amount").value);
+    let totalAmount = 0;
+
+    // Get all the bill items
+    const billPanel = document.getElementById("bill-panel");
+    const billItems = billPanel.getElementsByClassName("bill-item");
+
+    // Calculate the total amount
+    for (let item of billItems) {
+        totalAmount += parseFloat(item.querySelector(".bill-total").textContent);
+    }
+
+    // Validate discount input
+    if ((isNaN(discountPercentage) && isNaN(discountAmount)) || (discountPercentage < 0 && discountAmount < 0)) {
+        alert("Please enter a valid discount.");
+        return;
+    }
+
+    // Apply the discount based on user input
+    if (discountPercentage > 0) {
+        // Apply percentage discount
+        totalAmount -= totalAmount * (discountPercentage / 100);
+    }
+
+    if (discountAmount > 0) {
+        // Apply fixed amount discount
+        totalAmount -= discountAmount;
+    }
+
+    // Ensure the total doesn't go below zero
+    totalAmount = Math.max(0, totalAmount);
+
+    // Format the total amount with currency formatting
+    const formattedTotal = new Intl.NumberFormat('en-IN', {
+        style: 'currency',
+        currency: 'INR'
+    }).format(totalAmount);
+
+    // Update the total element with the discounted price
+    const totalElement = document.getElementById("total-amount");
+    totalElement.textContent = `Total: ${formattedTotal}`;
+
+    // Optionally, hide the discount section after applying the discount
+    document.getElementById("discount-section").style.display = 'none';
+}
+
+// Function to toggle the visibility of the discount inputs and apply button
+function toggleDiscountInputs() {
+    const discountSection = document.getElementById("discount-section");
+    
+    // Toggle the display style between block and none
+    if (discountSection.style.display === 'block') {
+        discountSection.style.display = 'none';
+    } else {
+        discountSection.style.display = 'block';
+    }
+}
+
+// Function to update the total amount of the bill (unchanged)
 function updateBillTotal() {
     const billPanel = document.getElementById("bill-panel");
     let totalAmount = 0;
@@ -269,12 +330,20 @@ function updateBillTotal() {
     }
 
     const totalElement = document.getElementById("total-amount");
+    const formattedTotal = new Intl.NumberFormat('en-IN', {
+        style: 'currency',
+        currency: 'INR'
+    }).format(totalAmount);
+
     if (billItems.length === 0) {
         totalElement.textContent = 'Total: Rs. 0.00 (Your bill is empty)';
     } else {
-        totalElement.textContent = `Total: Rs. ${totalAmount.toFixed(2)}`;
+        totalElement.textContent = `Total: ${formattedTotal}`;
     }
-}lElement.textContent = `Total: $${totalAmount.toFixed(2)}`;
+}
+
+
+
 
 //Function to handle the BILL button clicks:
 function saveAndPrintBill() {

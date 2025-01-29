@@ -37,6 +37,7 @@
     </div>
 
     <!-- Bill Panel (Right Side) -->
+<!-- Bill Panel (Right Side) -->
 <div id="bill-panel">
   <h3>Bill</h3>
   <div id="bill-items-list">
@@ -50,7 +51,24 @@
     <button id='saveandprintbutton' onclick="saveAndPrintBill()">Save and Print</button>
     <button id='holdbutton' onclick="holdBill()">Hold</button>
   </div>
+
+  <!-- Discount Section - Hidden by default -->
+  <div id="discount-section" style="margin-top: 15px; display: none;">
+    <label for="discount-percentage">Discount Percentage:</label>
+    <input type="number" id="discount-percentage" placeholder="Enter discount %" min="0" max="100" />
+    <br>
+    <label for="discount-amount">Fixed Discount (Rs.):</label>
+    <input type="number" id="discount-amount" placeholder="Enter discount amount" min="0" />
+  
+    <button id="apply-discount-btn" onclick="applyDiscount()">Apply</button>
 </div>
+
+
+  <!-- Apply Discount Button -->
+  <button id="applydiscountbutton" onclick="toggleDiscountInputs()">Apply Discount</button>
+
+</div>
+
 
   <script src="renderer.js"></script>
 </body>

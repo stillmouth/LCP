@@ -148,6 +148,58 @@ body {
     bottom: 10px;
     right: 10px;
 }
+#applydiscountbutton {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+/* CSS to improve the display of discount section */
+#discount-section {
+    margin-top: 15px;
+    display: none;  /* Hidden by default */
+    padding: 10px;
+    bottom: 10px;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;  /* Stack the children (labels + inputs) vertically */
+}
+
+#discount-section div {
+    display: flex;
+    align-items: center;  /* Align the label and input horizontally */
+    margin-bottom: 10px;  /* Space between label-input pairs */
+}
+
+#discount-section label {
+    margin-right: 10px; /* Space between the label and the input */
+    white-space: nowrap;  /* Prevent label text from wrapping */
+}
+
+#discount-section input {
+    padding: 5px;
+    width: 150px; /* Adjust the width of the input */
+    font-size: 16px;
+}
+
+#apply-discount-btn {
+    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    width: 100%;  /* Make the button take full width of the container */
+    max-width: 250px;
+}
+
+#apply-discount-btn:hover {
+    background-color: #45a049;
+}
+
+
 /* Basic styling for buttons */
 button:focus {
     outline: none;
