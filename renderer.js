@@ -90,21 +90,15 @@ function updateMainContent(contentType) {
 
     // Show or hide the bill panel based on the category selected
     if (contentType === 'Burgers') {
-        // Fetch burger items from the database
-        ipcRenderer.invoke('fetch-burgers').then((rows) => {
-            mainContent.innerHTML = createTableContent(rows, 'Burgers');
-            billPanel.style.display = 'block'; // Show bill panel
-        }).catch((err) => {
-            console.error("Error fetching burgers data:", err.message);
-        });
+        mainContent.innerHTML = `
+            <h2>Burgers</h2>
+            <p>Burgers</p>
+        `;
     } else if (contentType === 'Milkshakes') {
-        // Fetch milkshakes items from the database
-        ipcRenderer.invoke('fetch-milkshakes').then((rows) => {
-            mainContent.innerHTML = createTableContent(rows, 'Milkshakes');
-            billPanel.style.display = 'block'; // Show bill panel
-        }).catch((err) => {
-            console.error("Error fetching milkshakes data:", err.message);
-        });
+        mainContent.innerHTML = `
+            <h2>Milkshakes</h2>
+            <p>Milkshakes</p>
+        `;
     } else if (contentType === 'Momos') {
         mainContent.innerHTML = `
             <h2>MOMOS</h2>
@@ -350,6 +344,17 @@ function updateBillTotal() {
     }
 }
 
+// Open the 'Add Category' window when the green button is clicked
+document.body.addEventListener("click", (event) => {
+    if (event.target.id === "addCategoryBtn") {
+        ipcRenderer.send("open-add-category-window");
+    }
+});
+// Listen for category addition success
+ipcRenderer.on("category-added-success", () => {
+    alert("Category added successfully!");
+    // You can also update the UI dynamically to reflect the new category
+});
 
 
 
@@ -416,3 +421,6 @@ function updateLeftPanel(contentType) {
       `;
     } 
   }
+
+
+ 
