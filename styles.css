@@ -82,6 +82,7 @@ body {
 
 /* Bill Panel (Right Side) */
 #bill-panel {
+    position: relative;
     width: 600px; /* Change this value to your desired width */
     padding: 20px;
     background-color: #fff;
@@ -137,6 +138,16 @@ body {
     text-align: right;
 }
 
+#saveandprintbutton {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+}
+#holdbutton {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
 /* Basic styling for buttons */
 button:focus {
     outline: none;
@@ -154,6 +165,7 @@ button {
 button:hover {
     background-color: #45a049;
 }
+
 
 /* Basic styling for the quantity buttons and input */
 .quantity-btn {

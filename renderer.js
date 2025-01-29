@@ -276,6 +276,17 @@ function updateBillTotal() {
     }
 }lElement.textContent = `Total: $${totalAmount.toFixed(2)}`;
 
+//Function to handle the BILL button clicks:
+function saveAndPrintBill() {
+    alert("Bill saved and sent to print!");
+    window.print(); // Opens print dialog
+  }
+
+  function holdBill() {
+    alert("Bill put on hold!");
+    // Add logic to hold the bill (e.g., store it in localStorage)
+  }
+
 
 // Function to dynamically update the left panel (category or settings buttons)
 function updateLeftPanel(contentType) {

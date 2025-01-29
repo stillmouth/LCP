@@ -37,16 +37,20 @@
     </div>
 
     <!-- Bill Panel (Right Side) -->
-    <div id="bill-panel">
-      <h3>Bill</h3>
-      <div id="bill-items-list">
-          <!-- Items will be dynamically added here -->
-      </div>
-      <hr>
-      <div id="total-amount">Total: Rs. 0.00</div>
-    </div>
-
+<div id="bill-panel">
+  <h3>Bill</h3>
+  <div id="bill-items-list">
+      <!-- Items will be dynamically added here -->
   </div>
+  <hr>
+  <div id="total-amount">Total: Rs. 0.00</div>
+
+  <!-- Buttons Section - HOLD AND SAVE AND PRINT-->
+  <div id="bill-buttons" style="margin-top: 15px;">
+    <button id='saveandprintbutton' onclick="saveAndPrintBill()">Save and Print</button>
+    <button id='holdbutton' onclick="holdBill()">Hold</button>
+  </div>
+</div>
 
   <script src="renderer.js"></script>
 </body>
