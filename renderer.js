@@ -200,6 +200,14 @@ function updateMainContent(contentType) {
             <h2>THEME TOGGLE</h2>
             <p>DELETE AN ITEM</p>
         `;
+    } else if (contentType === 'AddFirstCategory') {
+        mainContent.innerHTML = `
+        <div style="display: flex; justify-content: center; align-items: center; height: 20vh;">
+            <button id="addCategoryBtn" style="background-color: green; color: white; padding: 20px 40px; font-size: 20px; border: none; cursor: pointer; width: 300px; height: 80px;">
+                Add Category
+            </button>
+        </div>
+    `;
     }
     updateLeftPanel(contentType);
 }
@@ -392,6 +400,14 @@ function updateLeftPanel(contentType) {
       categoryPanel.innerHTML = `
         <button class="category" id="OrderHistory" onclick="updateMainContent('OrderHistory')">Order History</button>
       `;
+    } else if (contentType === "Categories") {
+        // Render Settings-related buttons
+        categoryPanel.innerHTML = `
+          <p style="text-align: center;" id="AddFirstCategory">No categories added</p>
+          
+        `;
+        updateMainContent('AddFirstCategory');
+        
     } else if (contentType === "Settings") {
       // Render Settings-related buttons
       categoryPanel.innerHTML = `
