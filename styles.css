@@ -190,3 +190,24 @@ input[type="number"] {
         opacity: 1;
     }
 }
+/*FOR THE SCROLL OPTION IN THE TABLE DISPLAYED WHEN THE CATEGORIES ARE CLICKED */
+.table-container {
+    max-height: 400px; /* Adjust this height based on your UI */
+    overflow-y: auto; /* Enables vertical scrolling */
+    border: 1px solid #ccc; /* Optional: for better visibility */
+    margin-top: 10px; /* Optional: spacing above the table */
+}
+
+/* Optional: Add a scrollbar style for better visuals */
+.table-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 4px;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+    background-color: #aaa;
+}

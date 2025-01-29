@@ -47,42 +47,41 @@ document.addEventListener('DOMContentLoaded', () => {
 function createTableContent(rows, category) {
     return `
         <h2>${category}</h2>
-        <table style="width: 100%; border-collapse: collapse; text-align: left; border: 1px solid #ccc;">
-            <thead>
-                <tr>
-                    <th style="padding: 8px; border: 1px solid #ccc;">Item ID</th>
-                    <th style="padding: 8px; border: 1px solid #ccc;">Item Name</th>
-                    <th style="padding: 8px; border: 1px solid #ccc;">Price</th>
-                    <th style="padding: 8px; border: 1px solid #ccc;">Quantity</th>
-                    <th style="padding: 8px; border: 1px solid #ccc;">Add</th>
-                </tr>
-            </thead>
-            <tbody>
-                ${rows.map(row => `
+        <div class="table-container">
+            <table style="width: 100%; border-collapse: collapse; text-align: left; border: 1px solid #ccc;">
+                <thead>
                     <tr>
-                        <td style="padding: 8px; border: 1px solid #ccc;">${row.ITEMID}</td>
-                        <td style="padding: 8px; border: 1px solid #ccc;">${row.ITEMNAME}</td>
-                        <td style="padding: 8px; border: 1px solid #ccc;">${row.PRICE.toFixed(2)}</td>
-                        <td style="padding: 8px; border: 1px solid #ccc; text-align: center;">
-                            <button class="quantity-btn" onclick="changeQuantity('${row.ITEMID}', -1)" 
-                                style="padding: 4px 8px; margin: 0 4px;">-</button>
-                            <input type="number" id="quantity-${row.ITEMID}" value="0" min="0" readonly 
-                                style="width: 50px; text-align: center; padding: 4px; border: 1px solid #ccc;" />
-                            <button class="quantity-btn" onclick="changeQuantity('${row.ITEMID}', 1)" 
-                                style="padding: 4px 8px; margin: 0 4px;">+</button>
-                        </td>
-                        <td style="padding: 8px; border: 1px solid #ccc; text-align: center;">
-                            <button onclick="addToBill('${row.ITEMID}', '${row.ITEMNAME}', ${row.PRICE})" 
-                                style="padding: 6px 12px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;">
-                                Add to Bill
-                            </button>
-                        </td>
+                        <th style="padding: 8px; border: 1px solid #ccc;">Item ID</th>
+                        <th style="padding: 8px; border: 1px solid #ccc;">Item Name</th>
+                        <th style="padding: 8px; border: 1px solid #ccc;">Price</th>
+                        <th style="padding: 8px; border: 1px solid #ccc;">Quantity</th>
+                        <th style="padding: 8px; border: 1px solid #ccc;">Add</th>
                     </tr>
-                `).join('')}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    ${rows.map(row => `
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ccc;">${row.ITEMID}</td>
+                            <td style="padding: 8px; border: 1px solid #ccc;">${row.ITEMNAME}</td>
+                            <td style="padding: 8px; border: 1px solid #ccc;">${row.PRICE.toFixed(2)}</td>
+                            <td style="padding: 8px; border: 1px solid #ccc; text-align: center;">
+                                <button class="quantity-btn" onclick="changeQuantity('${row.ITEMID}', -1)">-</button>
+                                <input type="number" id="quantity-${row.ITEMID}" value="0" min="0" readonly style="width: 50px; text-align: center;" />
+                                <button class="quantity-btn" onclick="changeQuantity('${row.ITEMID}', 1)">+</button>
+                            </td>
+                            <td style="padding: 8px; border: 1px solid #ccc; text-align: center;">
+                                <button onclick="addToBill('${row.ITEMID}', '${row.ITEMNAME}', ${row.PRICE})" style="padding: 6px 12px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                                    Add to Bill
+                                </button>
+                            </td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+        </div>
     `;
 }
+
 
 // Function to handle category button clicks
 function updateMainContent(contentType) {
@@ -271,9 +270,9 @@ function updateBillTotal() {
 
     const totalElement = document.getElementById("total-amount");
     if (billItems.length === 0) {
-        totalElement.textContent = 'Total: $0.00 (Your bill is empty)';
+        totalElement.textContent = 'Total: Rs. 0.00 (Your bill is empty)';
     } else {
-        totalElement.textContent = `Total: $${totalAmount.toFixed(2)}`;
+        totalElement.textContent = `Total: Rs. ${totalAmount.toFixed(2)}`;
     }
 }lElement.textContent = `Total: $${totalAmount.toFixed(2)}`;
 
