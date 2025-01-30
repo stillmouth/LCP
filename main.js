@@ -164,3 +164,5 @@ ipcMain.on("add-category", (event, categoryName) => {
         }
     });
 });
+
+
