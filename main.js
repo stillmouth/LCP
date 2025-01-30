@@ -5,23 +5,17 @@ const sqlite3 = require("sqlite3").verbose();
 let mainWindow;
 let userRole = null;
 
-// // Handle login logic and return user role
+// Handle login logic and return user role
 ipcMain.handle('login', (event, password) => {
-    console.log("Received login request with password:", password); // ✅ Debugging log
-
-    if (password === '') {
-        userRole = 'admin'; 
+    if (password === '1212') {
+        userRole = 'admin'; // Set role for admin
     } else if (password === '1000') {
-        userRole = 'staff'; 
+        userRole = 'staff'; // Set role for staff
     } else {
-        userRole = null; 
+        userRole = null; // Invalid password
     }
-
-    console.log("Returning user role:", userRole); // ✅ Debugging log
-    return userRole;
+    return userRole; // Return the role (or null if invalid)
 });
-
-
 
 // Connect to the SQLite database
 const db = new sqlite3.Database('LC.db', (err) => {
@@ -139,7 +133,7 @@ ipcMain.on("open-add-category-window", () => {
 // Handle category addition
 ipcMain.on("add-category", (event, categoryName) => {
     if (!categoryName.trim()) {
-        event.sender.send("category-add-failed", "Category name cannot be empty.");
+        event.reply("category-add-failed", "Category name cannot be empty.");
         return;
     }
 
@@ -147,22 +141,41 @@ ipcMain.on("add-category", (event, categoryName) => {
     db.run(query, [categoryName], function (err) {
         if (err) {
             console.error("Error adding category:", err.message);
-            event.sender.send("category-add-failed", "Error adding category.");
+            event.reply("category-add-failed", "Error adding category.");
         } else {
-            // Send success message to the main window, not the closing window
-            event.sender.send("category-added-success");
-
-            // Ensure this event also reaches the main window
-            BrowserWindow.getAllWindows().forEach((win) => {
-                if (win !== addCategoryWindow) {
-                    win.webContents.send("category-added-success");
-                }
-            });
-
-            // Close the add category window
+            event.reply("category-added-success");
             if (addCategoryWindow) addCategoryWindow.close();
         }
     });
 });
 
+// Listen for order history requests
+ipcMain.on("get-order-history", (event, { startDate, endDate }) => {
+    const query = `
+        SELECT * FROM Orders WHERE date BETWEEN ? AND ?
+    `;
 
+    console.log("Start Date:", startDate);
+    console.log("End Date:", endDate);
+    
+    db.all(
+        `SELECT Orders.*, User.uname AS cashier_name 
+         FROM Orders 
+         JOIN User ON Orders.cashier = User.userid  -- ✅ CORRECT COLUMN NAME
+         WHERE date(Orders.date) BETWEEN date(?) AND date(?) 
+         ORDER BY date DESC`,
+        [startDate.trim(), endDate.trim()],
+        (err, rows) => {
+            if (err) {
+                console.error("Error fetching order history:", err);
+                event.reply("order-history-response", []);
+            } else {
+                console.log("Orders fetched:", rows);
+                event.reply("order-history-response", rows);
+            }
+        }
+    );
+    
+    
+    
+});
