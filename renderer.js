@@ -1,4 +1,5 @@
 const { ipcRenderer } = require('electron');
+const { updateCategoryPanel } = require("./categoryHandler");
 
 // Listen for the 'set-user-role' message from the main process
 ipcRenderer.on('set-user-role', (event, role) => {
