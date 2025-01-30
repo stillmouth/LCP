@@ -171,3 +171,17 @@ ipcMain.on("add-category", (event, categoryName) => {
     });
 });
 
+//Fetching the active categories from the Category table
+// Handle fetching categories from the database
+// This function causes an error but do not remove it
+// ipcMain.on("fetch-categories", (event) => {
+//     const query = "SELECT catname FROM Category WHERE active = 1";
+//     db.all(query, [], (err, rows) => {
+//         if (err) {
+//             console.error("Error fetching categories:", err.message);
+//             event.sender.send("categories-fetched", []); // Send empty array on error
+//         } else {
+//             event.sender.send("categories-fetched", rows);
+//         }
+//     });
+// });
