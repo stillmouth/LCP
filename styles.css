@@ -276,3 +276,18 @@ input[type="number"] {
 .table-container::-webkit-scrollbar-thumb:hover {
     background-color: #aaa;
 }
+
+.date-filters {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.date-filters label {
+    font-weight: bold;
+}
+
+#orderHistory {
+    margin-top: 20px;
+}

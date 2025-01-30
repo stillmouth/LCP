@@ -1,5 +1,6 @@
 const { ipcRenderer } = require('electron');
 const { updateCategoryPanel } = require("./categoryHandler");
+const { fetchOrderHistory } = require("./history");
 
 // Listen for the 'set-user-role' message from the main process
 ipcRenderer.on('set-user-role', (event, role) => {
@@ -29,3 +30,6 @@ ipcRenderer.on("category-added-success", () => {
     alert("Category added successfully!");
     // You can also update the UI dynamically to reflect the new category
 });
+
+// Make Order history available globally
+window.fetchOrderHistory = fetchOrderHistory;

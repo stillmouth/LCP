@@ -58,7 +58,22 @@ function updateMainContent(contentType) {
             <p>Welcome to the default home page!</p>
         `;
         billPanel.style.display = 'block'; // Hide bill panel on Home page
-    } else {
+    } else if (contentType === 'History') {
+        mainContent.innerHTML = `
+            <h2>Order History</h2>
+            <div class="date-filters">
+                <label for="startDate">Start Date:</label>
+                <input type="date" id="startDate">
+                
+                <label for="endDate">End Date:</label>
+                <input type="date" id="endDate">
+                
+                <button onclick="fetchOrderHistory()">Show History</button>
+            </div>
+            <div id="orderHistory"></div>
+        `;
+    }
+    else {
         // For Menu, Analytics, History (hide bill panel)
         mainContent.innerHTML = `
             <h2>${contentType}</h2>
@@ -161,7 +176,7 @@ function updateLeftPanel(contentType) {
     } else if (contentType === "History") {
       // Render History-related buttons
       categoryPanel.innerHTML = `
-        <button class="category" id="OrderHistory" onclick="updateMainContent('OrderHistory')">Order History</button>
+        
       `;
     } else if (contentType === "Categories") {
         // Render Settings-related buttons
