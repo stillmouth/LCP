@@ -94,36 +94,43 @@ function updateMainContent(contentType) {
             <h2>Burgers</h2>
             <p>Burgers</p>
         `;
+        billPanel.style.display = 'block';
     } else if (contentType === 'Milkshakes') {
         mainContent.innerHTML = `
             <h2>Milkshakes</h2>
             <p>Milkshakes</p>
         `;
+        billPanel.style.display = 'block';
     } else if (contentType === 'Momos') {
         mainContent.innerHTML = `
             <h2>MOMOS</h2>
             <p>MOMOS</p>
         `;
+        billPanel.style.display = 'block';
     } else if (contentType === 'Wraps') {
         mainContent.innerHTML = `
             <h2>WRAPS</h2>
             <p>WRAPS</p>
         `;
+        billPanel.style.display = 'block';
     } else if (contentType === 'Pops') {
         mainContent.innerHTML = `
             <h2>POPS</h2>
             <p>POPS</p>
         `;
+        billPanel.style.display = 'block';
     } else if (contentType === 'Fries') {
         mainContent.innerHTML = `
             <h2>FRIES</h2>
             <p>FRIES</p>
         `;
+        billPanel.style.display = 'block';
     } else if (contentType === 'Cold Coffee') {
         mainContent.innerHTML = `
             <h2>COLD COFFEE</h2>
             <p>COLD COFFEE</p>
         `;
+        billPanel.style.display = 'block';
     } else if (contentType === 'Lassi') {
         mainContent.innerHTML = `
             <h2>LASSI</h2>
