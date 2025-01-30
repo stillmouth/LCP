@@ -5,17 +5,23 @@ const sqlite3 = require("sqlite3").verbose();
 let mainWindow;
 let userRole = null;
 
-// Handle login logic and return user role
+// // Handle login logic and return user role
 ipcMain.handle('login', (event, password) => {
-    if (password === '1212') {
-        userRole = 'admin'; // Set role for admin
+    console.log("Received login request with password:", password); // ✅ Debugging log
+
+    if (password === '') {
+        userRole = 'admin'; 
     } else if (password === '1000') {
-        userRole = 'staff'; // Set role for staff
+        userRole = 'staff'; 
     } else {
-        userRole = null; // Invalid password
+        userRole = null; 
     }
-    return userRole; // Return the role (or null if invalid)
+
+    console.log("Returning user role:", userRole); // ✅ Debugging log
+    return userRole;
 });
+
+
 
 // Connect to the SQLite database
 const db = new sqlite3.Database('LC.db', (err) => {
@@ -47,7 +53,7 @@ app.on("ready", () => {
 
     Menu.setApplicationMenu(null);
 
-    // Load login page first
+    //Load login page first
     mainWindow.loadFile('login.html').catch(err => {
         console.error("Failed to load login.html:", err);
     });
@@ -139,7 +145,7 @@ ipcMain.on("open-add-category-window", () => {
 // Handle category addition
 ipcMain.on("add-category", (event, categoryName) => {
     if (!categoryName.trim()) {
-        event.reply("category-add-failed", "Category name cannot be empty.");
+        event.sender.send("category-add-failed", "Category name cannot be empty.");
         return;
     }
 
@@ -147,10 +153,21 @@ ipcMain.on("add-category", (event, categoryName) => {
     db.run(query, [categoryName], function (err) {
         if (err) {
             console.error("Error adding category:", err.message);
-            event.reply("category-add-failed", "Error adding category.");
+            event.sender.send("category-add-failed", "Error adding category.");
         } else {
-            event.reply("category-added-success");
+            // Send success message to the main window, not the closing window
+            event.sender.send("category-added-success");
+
+            // Ensure this event also reaches the main window
+            BrowserWindow.getAllWindows().forEach((win) => {
+                if (win !== addCategoryWindow) {
+                    win.webContents.send("category-added-success");
+                }
+            });
+
+            // Close the add category window
             if (addCategoryWindow) addCategoryWindow.close();
         }
     });
 });
+

@@ -1,4 +1,5 @@
 const { ipcRenderer } = require('electron');
+const { updateCategoryPanel } = require("./categoryHandler");
 
 // Listen for the 'set-user-role' message from the main process
 ipcRenderer.on('set-user-role', (event, role) => {
@@ -17,7 +18,7 @@ ipcRenderer.on('set-user-role', (event, role) => {
 });
 
 
-// Handle login form submission (for login.html)
+//Handle login form submission (for login.html)
 document.addEventListener('DOMContentLoaded', () => {
     // Ensure this runs only in login.html context
     const loginButton = document.getElementById('login-btn');
@@ -28,16 +29,18 @@ document.addEventListener('DOMContentLoaded', () => {
             // Send the password to the main process for validation
             ipcRenderer.invoke('login', password)
                 .then(userRole => {
+                    console.log("User role returned from main process:", userRole);
                     if (userRole === 'admin' || userRole === 'staff') {
+                        console.log("Login successful! Redirecting to index.html...");
                         ipcRenderer.invoke('login-success'); // Trigger index.html to load
                     } else {
-                        // Show the error message if the password is incorrect
                         document.getElementById('error-message').style.display = 'block';
                     }
                 })
                 .catch(err => {
-                    console.error('Error:', err);
+                    console.error('Error during login:', err);
                 });
+
         });
     }
 });
@@ -202,7 +205,10 @@ function updateMainContent(contentType) {
             </button>
         </div>
     `;
+    } else if (contentType === "Categories") {
+        updateCategoryPanel();
     }
+
     updateLeftPanel(contentType);
 }
 
@@ -351,11 +357,21 @@ document.body.addEventListener("click", (event) => {
     }
 });
 // Listen for category addition success
-ipcRenderer.on("category-added-success", () => {
-    alert("Category added successfully!");
-    // You can also update the UI dynamically to reflect the new category
+document.addEventListener("DOMContentLoaded", () => {
+    ipcRenderer.on("category-added-success", () => {
+        alert("Category added successfully!");
+        updateCategoryPanel(); // Refresh the left panel immediately
+    });
+
+    ipcRenderer.on("category-add-failed", (event, message) => {
+        alert("Failed to add category: " + message);
+    });
 });
 
+document.getElementById("confirmAddCategory").addEventListener("click", () => {
+    const categoryName = document.getElementById("categoryInput").value;
+    ipcRenderer.send("add-category", categoryName);
+});
 
 
 //Function to handle the BILL button clicks:
@@ -422,5 +438,7 @@ function updateLeftPanel(contentType) {
     } 
   }
 
+
+  
 
  

@@ -5,7 +5,12 @@ document.getElementById("addCategoryBtn").addEventListener("click", () => {
     ipcRenderer.send("add-category", categoryName);
 });
 
-// Handle errors
+// Listen for category success BEFORE the window closes
+ipcRenderer.on("category-added-success", () => {
+    alert("Category added successfully!");
+    window.close(); // Close after showing the alert
+});
+
 ipcRenderer.on("category-add-failed", (event, message) => {
     alert(message);
 });
