@@ -23,7 +23,7 @@ const db = new sqlite3.Database('LC.db', (err) => {
         console.error("Failed to connect to the database:", err.message);
     } else {
         console.log("Connected to the SQLite database.");
-        }
+    }
 });
 
 app.on("ready", () => {
@@ -47,27 +47,20 @@ app.on("ready", () => {
 
     Menu.setApplicationMenu(null);
 
-    // Load login page first
-    mainWindow.loadFile('login.html').catch(err => {
-        console.error("Failed to load login.html:", err);
+    // Skip the login process and directly load index.html for testing
+    mainWindow.loadFile('index.html').catch(err => {
+        console.error("Failed to load index.html:", err);
+    });
+
+    // Send the user role after loading index.html
+    mainWindow.webContents.once('did-finish-load', () => {
+        mainWindow.webContents.send('set-user-role', userRole);
     });
 
     // Handle the user role request
     ipcMain.handle('get-user-role', async () => {
         return userRole;
     });
-
-    // After successful login, redirect to index.html
-    ipcMain.handle('login-success', async () => {
-        if (userRole === 'admin' || userRole === 'staff') {
-            mainWindow.loadFile('index.html').then(() => {
-                mainWindow.webContents.send('set-user-role', userRole); // Send the user role after loading index.html
-            }).catch(err => {
-                console.error("Failed to load index.html:", err);
-            });
-        }
-    });
-    
 
     // Handle database queries
     ipcMain.handle('fetch-burgers', async () => {
@@ -108,8 +101,9 @@ app.on("activate", () => {
             }
         });
 
-        mainWindow.loadFile('login.html').catch(err => {
-            console.error("Failed to load login.html:", err);
+        // Skip login and load index.html directly
+        mainWindow.loadFile('index.html').catch(err => {
+            console.error("Failed to load index.html:", err);
         });
     }
 });

@@ -16,8 +16,9 @@ ipcRenderer.on('set-user-role', (event, role) => {
     }
 });
 
-
 // Handle login form submission (for login.html)
+// Commenting out the login part for testing other code without signing in
+/*
 document.addEventListener('DOMContentLoaded', () => {
     // Ensure this runs only in login.html context
     const loginButton = document.getElementById('login-btn');
@@ -41,6 +42,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+*/
+
+
 
 
 // Function to display the item values in the database
@@ -371,7 +375,7 @@ function saveAndPrintBill() {
     window.print(); // Opens print dialog
   }
 
-  function holdBill() {
+function holdBill() {
     alert("Bill put on hold!");
     // Add logic to hold the bill (e.g., store it in localStorage)
   }
