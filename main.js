@@ -151,6 +151,7 @@ ipcMain.on("add-category", (event, categoryName) => {
 
 // Listen for order history requests
 ipcMain.on("get-order-history", (event, { startDate, endDate }) => {
+    console.log("Fetching order history...")
     const query = `
         SELECT * FROM Orders WHERE date BETWEEN ? AND ?
     `;
@@ -158,24 +159,25 @@ ipcMain.on("get-order-history", (event, { startDate, endDate }) => {
     console.log("Start Date:", startDate);
     console.log("End Date:", endDate);
     
-    db.all(
-        `SELECT Orders.*, User.uname AS cashier_name 
-         FROM Orders 
-         JOIN User ON Orders.cashier = User.userid  -- ✅ CORRECT COLUMN NAME
-         WHERE date(Orders.date) BETWEEN date(?) AND date(?) 
-         ORDER BY date DESC`,
-        [startDate.trim(), endDate.trim()],
-        (err, rows) => {
-            if (err) {
-                console.error("Error fetching order history:", err);
-                event.reply("order-history-response", []);
-            } else {
-                console.log("Orders fetched:", rows);
-                event.reply("order-history-response", rows);
-            }
+    db.all(`
+        SELECT 
+            Orders.*, 
+            User.uname AS cashier_name, 
+            GROUP_CONCAT(FoodItem.fname || ' (x' || OrderDetails.quantity || ')', ', ') AS food_items
+        FROM Orders
+        JOIN User ON Orders.cashier = User.userid
+        JOIN OrderDetails ON Orders.billno = OrderDetails.orderid
+        JOIN FoodItem ON OrderDetails.foodid = FoodItem.fid
+        WHERE date(Orders.date) BETWEEN date(?) AND date(?)
+        GROUP BY Orders.billno
+        ORDER BY Orders.date DESC
+    `, [startDate, endDate], (err, rows) => {
+        if (err) {
+            console.error("Error fetching order history:", err);
+            event.reply("fetchOrderHistoryResponse", { success: false, orders: [] });
+            return;
         }
-    );
-    
-    
-    
+        console.log("Order history fetched:", rows);  // <-- Add this log
+        event.reply("order-history-response", { success: true, orders: rows });
+    });
 });
