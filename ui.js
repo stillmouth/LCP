@@ -1,13 +1,8 @@
 // Function to handle category button clicks
 // Function to handle category button clicks
-function updateMainContent(contentType) {
+async function updateMainContent(contentType) {
     const mainContent = document.getElementById("main-content");
     const billPanel = document.getElementById("bill-panel");
-
-    // Categories (Home Page)
-    const foodCategories = [
-        "Burgers", "Milkshakes", "Momos", "Wraps", "Pops", "Fries", "Cold Coffee", "Lassi"
-    ];
 
     // Menu Management
     const menuManagement = ["AddItem", "UpdateItem", "DeleteItem"];
@@ -26,95 +21,108 @@ function updateMainContent(contentType) {
         `;
         billPanel.style.display = 'block';
     } 
-    // Categories (Food Items)
-    else if (foodCategories.includes(contentType)) {
-        mainContent.innerHTML = `
-            <h2>${contentType}</h2>
-            <p>${contentType} Items</p>
-        `;
-        billPanel.style.display = 'block'; // Show bill panel for food items
-    } 
-    // Menu Management
-    else if (menuManagement.includes(contentType)) {
-        let actionText = {
-            "AddItem": "Add an item here",
-            "UpdateItem": "Edit an existing item",
-            "DeleteItem": "Remove an item from the menu"
-        };
-
-        mainContent.innerHTML = `
-            <h2>${contentType.replace(/([A-Z])/g, " $1")}</h2>
-            <p>${actionText[contentType]}</p>
-        `;
-        billPanel.style.display = 'none'; // Hide bill panel
-    } 
-    // Analytics
-    else if (analytics.includes(contentType)) {
-        let analyticsText = {
-            "SalesOverview": "Daily, weekly, and monthly sales overview",
-            "TopSelling": "Best selling items",
-            "Trends": "Latest trends in sales",
-        };
-
-        mainContent.innerHTML = `
-            <h2>${contentType.replace(/([A-Z])/g, " $1")}</h2>
-            <p>${analyticsText[contentType]}</p>
-        `;
-        billPanel.style.display = 'none';
-    } 
-    // Settings
-    else if (settings.includes(contentType)) {
-        let settingsText = {
-            "UserProfile": "Manage your profile",
-            "ThemeToggle": "Switch between light and dark themes"
-        };
-
-        mainContent.innerHTML = `
-            <h2>${contentType.replace(/([A-Z])/g, " $1")}</h2>
-            <p>${settingsText[contentType]}</p>
-        `;
-        billPanel.style.display = 'none';
-    } 
-    // Add First Category
-    else if (contentType === "AddFirstCategory") {
-        mainContent.innerHTML = `
-            <div style="display: flex; justify-content: center; align-items: center; height: 20vh;">
-                <button id="addCategoryBtn" style="background-color: green; color: white; padding: 20px 40px; font-size: 20px; border: none; cursor: pointer; width: 300px; height: 80px;">
-                    Add Category
-                </button>
-            </div>
-        `;
-        billPanel.style.display = 'none';
-    } 
-    //HISTORY TAB
-    else if (contentType === 'History') {
-        mainContent.innerHTML = `
-            <h2>Order History</h2>
-            <div class="date-filters">
-                <label for="startDate">Start Date:</label>
-                <input type="date" id="startDate">
-                
-                <label for="endDate">End Date:</label>
-                <input type="date" id="endDate">
-                
-                <button onclick="fetchOrderHistory()">Show History</button>
-            </div>
-            <div id="orderHistory"></div>
-        `;
-    }
-    // Default Case
+    // Fetch and display food items dynamically
     else {
-        mainContent.innerHTML = `
-            <h2>${contentType}</h2>
-            <p>Content for ${contentType}</p>
-        `;
-        billPanel.style.display = 'none';
+        const foodItems = await ipcRenderer.invoke("get-food-items", contentType);
+
+        if (foodItems.length > 0) {
+            mainContent.innerHTML = `
+                <h2>${contentType}</h2>
+                <div class="food-items">
+                    ${foodItems
+                        .map(
+                            (item) => `
+                            <div class="food-item">
+                                <h3>${item.fname} ${item.veg ? "🌱" : "🍖"}</h3>
+                                <p>Price: ₹${item.cost}</p>
+                            </div>`
+                        )
+                        .join("")}
+                </div>
+            `;
+            billPanel.style.display = "block";
+        } 
+        // Menu Management
+        else if (menuManagement.includes(contentType)) {
+            let actionText = {
+                "AddItem": "Add an item here",
+                "UpdateItem": "Edit an existing item",
+                "DeleteItem": "Remove an item from the menu"
+            };
+
+            mainContent.innerHTML = `
+                <h2>${contentType.replace(/([A-Z])/g, " $1")}</h2>
+                <p>${actionText[contentType]}</p>
+            `;
+            billPanel.style.display = 'none';
+        } 
+        // Analytics
+        else if (analytics.includes(contentType)) {
+            let analyticsText = {
+                "SalesOverview": "Daily, weekly, and monthly sales overview",
+                "TopSelling": "Best selling items",
+                "Trends": "Latest trends in sales",
+            };
+
+            mainContent.innerHTML = `
+                <h2>${contentType.replace(/([A-Z])/g, " $1")}</h2>
+                <p>${analyticsText[contentType]}</p>
+            `;
+            billPanel.style.display = 'none';
+        } 
+        // Settings
+        else if (settings.includes(contentType)) {
+            let settingsText = {
+                "UserProfile": "Manage your profile",
+                "ThemeToggle": "Switch between light and dark themes"
+            };
+
+            mainContent.innerHTML = `
+                <h2>${contentType.replace(/([A-Z])/g, " $1")}</h2>
+                <p>${settingsText[contentType]}</p>
+            `;
+            billPanel.style.display = 'none';
+        } 
+        // Add First Category
+        else if (contentType === "AddFirstCategory") {
+            mainContent.innerHTML = `
+                <div style="display: flex; justify-content: center; align-items: center; height: 20vh;">
+                    <button id="addCategoryBtn" style="background-color: green; color: white; padding: 20px 40px; font-size: 20px; border: none; cursor: pointer; width: 300px; height: 80px;">
+                        Add Category
+                    </button>
+                </div>
+            `;
+            billPanel.style.display = 'none';
+        } 
+        // HISTORY TAB
+        else if (contentType === 'History') {
+            mainContent.innerHTML = `
+                <h2>Order History</h2>
+                <div class="date-filters">
+                    <label for="startDate">Start Date:</label>
+                    <input type="date" id="startDate">
+                    
+                    <label for="endDate">End Date:</label>
+                    <input type="date" id="endDate">
+                    
+                    <button onclick="fetchOrderHistory()">Show History</button>
+                </div>
+                <div id="orderHistory"></div>
+            `;
+        } 
+        // Default Case
+        else {
+            mainContent.innerHTML = `
+                <h2>${contentType}</h2>
+                <p>No items found in this category.</p>
+            `;
+            billPanel.style.display = 'block';
+        }
     }
 
     // Update left panel dynamically
     updateLeftPanel(contentType);
 }
-
 
 // Function to dynamically update the left panel (category or settings buttons)
 async function updateLeftPanel(contentType) {
