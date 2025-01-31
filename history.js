@@ -26,9 +26,9 @@ ipcRenderer.on("order-history-response", (event, data) => {
 
     // Create a table
     let tableHTML = `
-        <table border="1" style="width:100%; border-collapse: collapse; text-align: center;">
+        <table class="order-history-table">
             <thead>
-                <tr style="background-color: #f4f4f4;">
+                <tr>
                     <th>Bill No</th>
                     <th>Date</th>
                     <th>Cashier</th>
