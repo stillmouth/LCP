@@ -1,165 +1,148 @@
 // Function to handle category button clicks
-function updateMainContent(contentType) {
+// Function to handle category button clicks
+async function updateMainContent(contentType) {
     const mainContent = document.getElementById("main-content");
     const billPanel = document.getElementById("bill-panel");
 
-    // Show or hide the bill panel based on the category selected
-    if (contentType === 'Burgers') {
-        mainContent.innerHTML = `
-            <h2>Burgers</h2>
-            <p>Burgers</p>
-        `;
-        billPanel.style.display = 'block';
-    } else if (contentType === 'Milkshakes') {
-        mainContent.innerHTML = `
-            <h2>Milkshakes</h2>
-            <p>Milkshakes</p>
-        `;
-        billPanel.style.display = 'block';
-    } else if (contentType === 'Momos') {
-        mainContent.innerHTML = `
-            <h2>MOMOS</h2>
-            <p>MOMOS</p>
-        `;
-        billPanel.style.display = 'block';
-    } else if (contentType === 'Wraps') {
-        mainContent.innerHTML = `
-            <h2>WRAPS</h2>
-            <p>WRAPS</p>
-        `;
-        billPanel.style.display = 'block';
-    } else if (contentType === 'Pops') {
-        mainContent.innerHTML = `
-            <h2>POPS</h2>
-            <p>POPS</p>
-        `;
-        billPanel.style.display = 'block';
-    } else if (contentType === 'Fries') {
-        mainContent.innerHTML = `
-            <h2>FRIES</h2>
-            <p>FRIES</p>
-        `;
-        billPanel.style.display = 'block';
-    } else if (contentType === 'Cold Coffee') {
-        mainContent.innerHTML = `
-            <h2>COLD COFFEE</h2>
-            <p>COLD COFFEE</p>
-        `;
-        billPanel.style.display = 'block';
-    } else if (contentType === 'Lassi') {
-        mainContent.innerHTML = `
-            <h2>LASSI</h2>
-            <p>LASSI</p>
-        `;
-        billPanel.style.display = 'block'; // Show bill panel
-    } else if (contentType === 'Home') {
+    // Menu Management
+    const menuManagement = ["AddItem", "UpdateItem", "DeleteItem"];
+
+    // Analytics
+    const analytics = ["SalesOverview", "TopSelling", "Trends", "OrderHistory"];
+
+    // Settings
+    const settings = ["UserProfile", "ThemeToggle"];
+
+    // Home Screen
+    if (contentType === "Home") {
         mainContent.innerHTML = `
             <h2>Home</h2>
             <p>Welcome to the default home page!</p>
         `;
-        billPanel.style.display = 'block'; // Hide bill panel on Home page
-    } else if (contentType === 'History') {
-        mainContent.innerHTML = `
-            <h2>Order History</h2>
-            <div class="date-filters">
-                <label for="startDate">Start Date:</label>
-                <input type="date" id="startDate">
-                
-                <label for="endDate">End Date:</label>
-                <input type="date" id="endDate">
-                
-                <button onclick="fetchOrderHistory()">Show History</button>
-            </div>
-            <div id="orderHistory"></div>
-        `;
-    }
-    else {
-        // For Menu, Analytics, History (hide bill panel)
-        mainContent.innerHTML = `
-            <h2>${contentType}</h2>
-            <p>Content for ${contentType}</p>
-        `;
-        billPanel.style.display = 'none'; // Hide bill panel for other pages
+        billPanel.style.display = 'block';
     } 
-    if (contentType === 'Settings') {
-        mainContent.innerHTML = `
-            <h2>SETTINGS</h2>
-            <p>USER PROFILE, THEME etc...</p>
-        `;
-    } else if (contentType === 'AddItem') {
-        mainContent.innerHTML = `
-            <h2>This is where item can be added to the menu</h2>
-            <p>Add an item here</p>
-        `;
-    } else if (contentType === 'UpdateItem') {
-        mainContent.innerHTML = `
-            <h2>Edit an item in the menu</h2>
-            <p>EDIT AN ITEM</p>
-        `;
-    } else if (contentType === 'DeleteItem') {
-        mainContent.innerHTML = `
-            <h2>Delete an item from the menu</h2>
-            <p>DELETE AN ITEM</p>
-        `;
-    } else if (contentType === 'SalesOverview') {
-        mainContent.innerHTML = `
-            <h2>Daily, weekly, monthly sales revealed here</h2>
-            <p>over view sales</p>
-        `;
-    } else if (contentType === 'TopSelling') {
-        mainContent.innerHTML = `
-            <h2>TOP SELLING</h2>
-            <p>DELETE AN ITEM</p>
-        `;
-    } else if (contentType === 'Trends') {
-        mainContent.innerHTML = `
-            <h2>TRENDS</h2>
-            <p>DELETE AN ITEM</p>
-        `;
-    } else if (contentType === 'OrderHistory') {
-        mainContent.innerHTML = `
-            <h2>ORDER HISTORY</h2>
-            <p>DELETE AN ITEM</p>
-        `;
-    } else if (contentType === 'User Profile') {
-        mainContent.innerHTML = `
-            <h2>USER PROFILE</h2>
-            <p>DELETE AN ITEM</p>
-        `;
-    } else if (contentType === 'ThemeToggle') {
-        mainContent.innerHTML = `
-            <h2>THEME TOGGLE</h2>
-            <p>DELETE AN ITEM</p>
-        `;
-    } else if (contentType === 'AddFirstCategory') {
-        mainContent.innerHTML = `
-        <div style="display: flex; justify-content: center; align-items: center; height: 20vh;">
-            <button id="addCategoryBtn" style="background-color: green; color: white; padding: 20px 40px; font-size: 20px; border: none; cursor: pointer; width: 300px; height: 80px;">
-                Add Category
-            </button>
-        </div>
-    `;
+    // Fetch and display food items dynamically
+    else {
+        const foodItems = await ipcRenderer.invoke("get-food-items", contentType);
+
+        if (foodItems.length > 0) {
+            mainContent.innerHTML = `
+                <h2>${contentType}</h2>
+                <div class="food-items">
+                    ${foodItems
+                        .map(
+                            (item) => `
+                            <div class="food-item">
+                                <h3>${item.fname} ${item.veg ? "🌱" : "🍖"}</h3>
+                                <p>Price: ₹${item.cost}</p>
+                            </div>`
+                        )
+                        .join("")}
+                </div>
+            `;
+            billPanel.style.display = "block";
+        } 
+        // Menu Management
+        else if (menuManagement.includes(contentType)) {
+            let actionText = {
+                "AddItem": "Add an item here",
+                "UpdateItem": "Edit an existing item",
+                "DeleteItem": "Remove an item from the menu"
+            };
+
+            mainContent.innerHTML = `
+                <h2>${contentType.replace(/([A-Z])/g, " $1")}</h2>
+                <p>${actionText[contentType]}</p>
+            `;
+            billPanel.style.display = 'none';
+        } 
+        // Analytics
+        else if (analytics.includes(contentType)) {
+            let analyticsText = {
+                "SalesOverview": "Daily, weekly, and monthly sales overview",
+                "TopSelling": "Best selling items",
+                "Trends": "Latest trends in sales",
+            };
+
+            mainContent.innerHTML = `
+                <h2>${contentType.replace(/([A-Z])/g, " $1")}</h2>
+                <p>${analyticsText[contentType]}</p>
+            `;
+            billPanel.style.display = 'none';
+        } 
+        // Settings
+        else if (settings.includes(contentType)) {
+            let settingsText = {
+                "UserProfile": "Manage your profile",
+                "ThemeToggle": "Switch between light and dark themes"
+            };
+
+            mainContent.innerHTML = `
+                <h2>${contentType.replace(/([A-Z])/g, " $1")}</h2>
+                <p>${settingsText[contentType]}</p>
+            `;
+            billPanel.style.display = 'none';
+        } 
+        // Add First Category
+        else if (contentType === "AddFirstCategory") {
+            mainContent.innerHTML = `
+                <div style="display: flex; justify-content: center; align-items: center; height: 20vh;">
+                    <button id="addCategoryBtn" style="background-color: green; color: white; padding: 20px 40px; font-size: 20px; border: none; cursor: pointer; width: 300px; height: 80px;">
+                        Add Category
+                    </button>
+                </div>
+            `;
+            billPanel.style.display = 'none';
+        } 
+        // HISTORY TAB
+        else if (contentType === 'History') {
+            mainContent.innerHTML = `
+                <h2>Order History</h2>
+                <div class="date-filters">
+                    <label for="startDate">Start Date:</label>
+                    <input type="date" id="startDate">
+                    
+                    <label for="endDate">End Date:</label>
+                    <input type="date" id="endDate">
+                    
+                    <button onclick="fetchOrderHistory()">Show History</button>
+                </div>
+                <div id="orderHistory"></div>
+            `;
+        } 
+        // Default Case
+        else {
+            mainContent.innerHTML = `
+                <h2>${contentType}</h2>
+                <p>No items found in this category.</p>
+            `;
+            billPanel.style.display = 'block';
+        }
     }
+
+    // Update left panel dynamically
     updateLeftPanel(contentType);
 }
 
 // Function to dynamically update the left panel (category or settings buttons)
-function updateLeftPanel(contentType) {
+async function updateLeftPanel(contentType) {
     const categoryPanel = document.getElementById("category-panel");
 
     switch (contentType) {
         case "Home":
             // Render Home-related buttons
-            categoryPanel.innerHTML = `
-                <button class="category" id="Burgers" onclick="updateMainContent('Burgers')">Burger</button>
-                <button class="category" id="Milkshakes" onclick="updateMainContent('Milkshakes')">Milkshakes</button>
-                <button class="category" id="Momos" onclick="updateMainContent('Momos')">Momos</button>
-                <button class="category" id="Wraps" onclick="updateMainContent('Wraps')">Wraps</button>
-                <button class="category" id="Pops" onclick="updateMainContent('Pops')">Pops</button>
-                <button class="category" id="Fries" onclick="updateMainContent('Fries')">Fries</button>
-                <button class="category" id="Cold Coffee" onclick="updateMainContent('Cold Coffee')">Cold Coffee</button>
-                <button class="category" id="Lassi" onclick="updateMainContent('Lassi')">Lassi</button>
-            `;
+            const categories = await ipcRenderer.invoke("get-categories");
+
+            if (categories.length > 0) {
+                categoryPanel.innerHTML = categories
+                    .map(
+                        (category) =>
+                            `<button class="category" id="${category.catname}" onclick="updateMainContent('${category.catname}')">${category.catname}</button>`
+                    )
+                    .join("");
+            } else {
+                categoryPanel.innerHTML = "<p>No categories found.</p>";
+            }
             break;
 
         case "Menu":
