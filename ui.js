@@ -1,5 +1,4 @@
 // Function to handle category button clicks
-// Function to handle category button clicks
 async function updateMainContent(contentType) {
     const mainContent = document.getElementById("main-content");
     const billPanel = document.getElementById("bill-panel");
@@ -19,7 +18,7 @@ async function updateMainContent(contentType) {
             <h2>Home</h2>
             <p>Welcome to the default home page!</p>
         `;
-        billPanel.style.display = 'block';
+        billPanel.style.display = 'block'; // Show bill panel for Home
     } 
     // Fetch and display food items dynamically
     else {
@@ -40,7 +39,7 @@ async function updateMainContent(contentType) {
                         .join("")}
                 </div>
             `;
-            billPanel.style.display = "block";
+            billPanel.style.display = "none"; // Hide bill panel for other categories
         } 
         // Menu Management
         else if (menuManagement.includes(contentType)) {
@@ -54,7 +53,7 @@ async function updateMainContent(contentType) {
                 <h2>${contentType.replace(/([A-Z])/g, " $1")}</h2>
                 <p>${actionText[contentType]}</p>
             `;
-            billPanel.style.display = 'none';
+            billPanel.style.display = 'none'; // Hide bill panel for Menu Management
         } 
         // Analytics
         else if (analytics.includes(contentType)) {
@@ -68,7 +67,7 @@ async function updateMainContent(contentType) {
                 <h2>${contentType.replace(/([A-Z])/g, " $1")}</h2>
                 <p>${analyticsText[contentType]}</p>
             `;
-            billPanel.style.display = 'none';
+            billPanel.style.display = 'none'; // Hide bill panel for Analytics
         } 
         // Settings
         else if (settings.includes(contentType)) {
@@ -81,7 +80,7 @@ async function updateMainContent(contentType) {
                 <h2>${contentType.replace(/([A-Z])/g, " $1")}</h2>
                 <p>${settingsText[contentType]}</p>
             `;
-            billPanel.style.display = 'none';
+            billPanel.style.display = 'none'; // Hide bill panel for Settings
         } 
         // Add First Category
         else if (contentType === "AddFirstCategory") {
@@ -92,7 +91,7 @@ async function updateMainContent(contentType) {
                     </button>
                 </div>
             `;
-            billPanel.style.display = 'none';
+            billPanel.style.display = 'none'; // Hide bill panel for Add First Category
         } 
         // HISTORY TAB
         else if (contentType === 'History') {
@@ -109,6 +108,7 @@ async function updateMainContent(contentType) {
                 </div>
                 <div id="orderHistory"></div>
             `;
+            billPanel.style.display = 'none'; // Hide bill panel for History
         } 
         // Default Case
         else {
@@ -116,7 +116,7 @@ async function updateMainContent(contentType) {
                 <h2>${contentType}</h2>
                 <p>No items found in this category.</p>
             `;
-            billPanel.style.display = 'block';
+            billPanel.style.display = 'none'; // Hide bill panel for Default Case
         }
     }
 

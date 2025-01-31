@@ -151,6 +151,7 @@ ipcMain.on("add-category", (event, categoryName) => {
 
 // Listen for order history requests
 ipcMain.on("get-order-history", (event, { startDate, endDate }) => {
+    console.log("Fetching order history...")
     const query = `
         SELECT * FROM Orders WHERE date BETWEEN ? AND ?
     `;
