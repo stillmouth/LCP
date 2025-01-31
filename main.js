@@ -175,7 +175,17 @@ ipcMain.on("get-order-history", (event, { startDate, endDate }) => {
             }
         }
     );
-    
-    
-    
+});
+
+
+ipcMain.handle("get-categories", async () => {
+    return new Promise((resolve, reject) => {
+        db.all("SELECT catname FROM Category WHERE active = 1", [], (err, rows) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(rows);
+            }
+        });
+    });
 });

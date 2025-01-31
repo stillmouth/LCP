@@ -144,22 +144,24 @@ function updateMainContent(contentType) {
 }
 
 // Function to dynamically update the left panel (category or settings buttons)
-function updateLeftPanel(contentType) {
+async function updateLeftPanel(contentType) {
     const categoryPanel = document.getElementById("category-panel");
 
     switch (contentType) {
         case "Home":
             // Render Home-related buttons
-            categoryPanel.innerHTML = `
-                <button class="category" id="Burgers" onclick="updateMainContent('Burgers')">Burger</button>
-                <button class="category" id="Milkshakes" onclick="updateMainContent('Milkshakes')">Milkshakes</button>
-                <button class="category" id="Momos" onclick="updateMainContent('Momos')">Momos</button>
-                <button class="category" id="Wraps" onclick="updateMainContent('Wraps')">Wraps</button>
-                <button class="category" id="Pops" onclick="updateMainContent('Pops')">Pops</button>
-                <button class="category" id="Fries" onclick="updateMainContent('Fries')">Fries</button>
-                <button class="category" id="Cold Coffee" onclick="updateMainContent('Cold Coffee')">Cold Coffee</button>
-                <button class="category" id="Lassi" onclick="updateMainContent('Lassi')">Lassi</button>
-            `;
+            const categories = await ipcRenderer.invoke("get-categories");
+
+            if (categories.length > 0) {
+                categoryPanel.innerHTML = categories
+                    .map(
+                        (category) =>
+                            `<button class="category" id="${category.catname}" onclick="updateMainContent('${category.catname}')">${category.catname}</button>`
+                    )
+                    .join("");
+            } else {
+                categoryPanel.innerHTML = "<p>No categories found.</p>";
+            }
             break;
 
         case "Menu":
