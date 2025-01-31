@@ -146,50 +146,59 @@ function updateMainContent(contentType) {
 // Function to dynamically update the left panel (category or settings buttons)
 function updateLeftPanel(contentType) {
     const categoryPanel = document.getElementById("category-panel");
-  
-    if (contentType === "Home") {
-      // Render Home-related buttons
-      categoryPanel.innerHTML = `
-        <button class="category" id="Burgers" onclick="updateMainContent('Burgers')">Burger</button>
-        <button class="category" id="Milkshakes" onclick="updateMainContent('Milkshakes')">Milkshakes</button>
-        <button class="category" id="Momos" onclick="updateMainContent('Momos')">Momos</button>
-        <button class="category" id="Wraps" onclick="updateMainContent('Wraps')">Wraps</button>
-        <button class="category" id="Pops" onclick="updateMainContent('Pops')">Pops</button>
-        <button class="category" id="Fries" onclick="updateMainContent('Fries')">Fries</button>
-        <button class="category" id="Cold Coffee" onclick="updateMainContent('Cold Coffee')">Cold Coffee</button>
-        <button class="category" id="Lassi" onclick="updateMainContent('Lassi')">Lassi</button>
-      `;
-    } else if (contentType === "Menu") {
-      // Render Menu-related buttons
-      categoryPanel.innerHTML = `
-        <button class="category" id="AddItem" onclick="updateMainContent('AddItem')">Add Item</button>
-        <button class="category" id="UpdateItem" onclick="updateMainContent('UpdateItem')">Update Item</button>
-        <button class="category" id="DeleteItem" onclick="updateMainContent('DeleteItem')">Delete Item</button>
-      `;
-    } else if (contentType === "Analytics") {
-      // Render Analytics-related buttons
-      categoryPanel.innerHTML = `
-        <button class="category" id="SalesOverview" onclick="updateMainContent('SalesOverview')">Sales Overview</button>
-        <button class="category" id="TopSelling" onclick="updateMainContent('TopSelling')">Top Selling</button>
-        <button class="category" id="Trends" onclick="updateMainContent('Trends')">Trends</button>
-      `;
-    } else if (contentType === "History") {
-      // Render History-related buttons
-      categoryPanel.innerHTML = `
-        
-      `;
-    } else if (contentType === "Categories") {
-        // Render Settings-related buttons
-        categoryPanel.innerHTML = `
-          <p style="text-align: center;" id="AddFirstCategory">No categories added</p>
-        `;
-        updateMainContent('AddFirstCategory');
-        
-    } else if (contentType === "Settings") {
-      // Render Settings-related buttons
-      categoryPanel.innerHTML = `
-        <button class="category" id="User Profile" onclick="updateMainContent('User Profile')">User  Profile</button>
-        <button class="category" id="ThemeToggle" onclick="updateMainContent('ThemeToggle')">Light/Dark Mode</button>
-      `;
-    } 
+
+    switch (contentType) {
+        case "Home":
+            // Render Home-related buttons
+            categoryPanel.innerHTML = `
+                <button class="category" id="Burgers" onclick="updateMainContent('Burgers')">Burger</button>
+                <button class="category" id="Milkshakes" onclick="updateMainContent('Milkshakes')">Milkshakes</button>
+                <button class="category" id="Momos" onclick="updateMainContent('Momos')">Momos</button>
+                <button class="category" id="Wraps" onclick="updateMainContent('Wraps')">Wraps</button>
+                <button class="category" id="Pops" onclick="updateMainContent('Pops')">Pops</button>
+                <button class="category" id="Fries" onclick="updateMainContent('Fries')">Fries</button>
+                <button class="category" id="Cold Coffee" onclick="updateMainContent('Cold Coffee')">Cold Coffee</button>
+                <button class="category" id="Lassi" onclick="updateMainContent('Lassi')">Lassi</button>
+            `;
+            break;
+
+        case "Menu":
+            // Render Menu-related buttons
+            categoryPanel.innerHTML = `
+                <button class="category" id="AddItem" onclick="updateMainContent('AddItem')">Add Item</button>
+                <button class="category" id="UpdateItem" onclick="updateMainContent('UpdateItem')">Update Item</button>
+                <button class="category" id="DeleteItem" onclick="updateMainContent('DeleteItem')">Delete Item</button>
+            `;
+            break;
+
+        case "Analytics":
+            // Render Analytics-related buttons
+            categoryPanel.innerHTML = `
+                <button class="category" id="SalesOverview" onclick="updateMainContent('SalesOverview')">Sales Overview</button>
+                <button class="category" id="TopSelling" onclick="updateMainContent('TopSelling')">Top Selling</button>
+                <button class="category" id="Trends" onclick="updateMainContent('Trends')">Trends</button>
+            `;
+            break;
+
+        case "History":
+            // Render History-related buttons (currently empty)
+            categoryPanel.innerHTML = ``;
+            break;
+
+        case "Categories":
+            // Render category-related content when no categories exist
+            categoryPanel.innerHTML = `
+                <p style="text-align: center;" id="AddFirstCategory">No categories added</p>
+            `;
+            updateMainContent('AddFirstCategory');
+            break;
+
+        case "Settings":
+            // Render Settings-related buttons
+            categoryPanel.innerHTML = `
+                <button class="category" id="User Profile" onclick="updateMainContent('User Profile')">User Profile</button>
+                <button class="category" id="ThemeToggle" onclick="updateMainContent('ThemeToggle')">Light/Dark Mode</button>
+            `;
+            break;
+    }
 }
