@@ -155,8 +155,8 @@ ipcMain.on("get-order-history", (event, { startDate, endDate }) => {
         SELECT * FROM Orders WHERE date BETWEEN ? AND ?
     `;
 
-    console.log("Start Date:", startDate);
-    console.log("End Date:", endDate);
+    //console.log("Start Date:", startDate);
+    //console.log("End Date:", endDate);
     
     db.all(
         `SELECT Orders.*, User.uname AS cashier_name 
@@ -169,10 +169,10 @@ ipcMain.on("get-order-history", (event, { startDate, endDate }) => {
             if (err) {
                 console.error("Error fetching order history:", err);
                 event.reply("order-history-response", []);
-            } else {
-                console.log("Orders fetched:", rows);
+            } //else {
+               // console.log("Orders fetched:", rows);
                 event.reply("order-history-response", rows);
-            }
+           // }
         }
     );
 });
