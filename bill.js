@@ -1,6 +1,5 @@
 // Add an item to the bill
-function addToBill(itemId, itemName, price) {
-    const quantity = parseInt(document.getElementById(`quantity-${itemId}`).value);
+function addToBill(itemId, itemName, price, quantity) {
     if (quantity > 0) {
         const totalPrice = price * quantity;
         const billPanel = document.getElementById("bill-panel");

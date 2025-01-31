@@ -193,7 +193,7 @@ ipcMain.handle("get-categories", async () => {
 ipcMain.handle("get-food-items", async (event, categoryName) => {
     return new Promise((resolve, reject) => {
         const query = `
-            SELECT f.fname, f.cost, f.veg 
+            SELECT f.fid,f.fname, f.cost, f.veg 
             FROM FoodItem f 
             JOIN Category c ON f.category = c.catid 
             WHERE c.catname = ? AND f.active = 1 AND f.is_on = 1

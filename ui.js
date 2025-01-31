@@ -26,22 +26,67 @@ async function updateMainContent(contentType) {
         const foodItems = await ipcRenderer.invoke("get-food-items", contentType);
 
         if (foodItems.length > 0) {
-            mainContent.innerHTML = `
-                <h2>${contentType}</h2>
-                <div class="food-items">
+            mainContent.innerHTML = 
+                `<h2>${contentType}</h2>
+                <div class="food-items" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;">
                     ${foodItems
                         .map(
-                            (item) => `
-                            <div class="food-item">
-                                <h3>${item.fname} ${item.veg ? "🌱" : "🍖"}</h3>
+                            (item) => 
+                            `<div class="food-item" style="border: 1px solid #ccc; padding: 10px; text-align: center;">
+                                <h3>${item.fid}. ${item.fname} ${item.veg ? "🌱" : "🍖"}</h3>
                                 <p>Price: ₹${item.cost}</p>
+                                <div class="quantity-control">
+                                    <button class="decrease-quantity" data-fid="${item.fid}">-</button>
+                                    <span class="quantity" id="quantity-${item.fid}">1</span>
+                                    <button class="increase-quantity" data-fid="${item.fid}">+</button>
+                                </div>
+                                <button class="add-to-bill" data-fid="${item.fid}" data-fname="${item.fname}" data-price="${item.cost}">ADD</button>
                             </div>`
                         )
                         .join("")}
                 </div>
             `;
             billPanel.style.display = "block";
-        } 
+        
+            // Add event listener to "ADD" buttons
+            const addToBillButtons = document.querySelectorAll(".add-to-bill");
+            addToBillButtons.forEach(button => {
+                button.addEventListener("click", (event) => {
+                    const itemId = event.target.getAttribute("data-fid");
+                    const itemName = event.target.getAttribute("data-fname");
+                    const price = parseFloat(event.target.getAttribute("data-price"));
+                    const quantity = parseInt(document.getElementById(`quantity-${itemId}`).textContent);
+                    addToBill(itemId, itemName, price, quantity);  // Pass quantity now
+                });
+            });
+        
+            // Add event listener to the quantity control buttons
+            const decreaseButtons = document.querySelectorAll(".decrease-quantity");
+            const increaseButtons = document.querySelectorAll(".increase-quantity");
+        
+            decreaseButtons.forEach(button => {
+                button.addEventListener("click", (event) => {
+                    const itemId = event.target.getAttribute("data-fid");
+                    const quantityElement = document.getElementById(`quantity-${itemId}`);
+                    let currentQuantity = parseInt(quantityElement.textContent);
+                    if (currentQuantity > 1) {
+                        quantityElement.textContent = currentQuantity - 1;
+                    }
+                });
+            });
+        
+            increaseButtons.forEach(button => {
+                button.addEventListener("click", (event) => {
+                    const itemId = event.target.getAttribute("data-fid");
+                    const quantityElement = document.getElementById(`quantity-${itemId}`);
+                    let currentQuantity = parseInt(quantityElement.textContent);
+                    quantityElement.textContent = currentQuantity + 1;
+                });
+            });
+        }
+        
+        
+        
         // Menu Management
         else if (menuManagement.includes(contentType)) {
             let actionText = {
@@ -116,7 +161,7 @@ async function updateMainContent(contentType) {
                 <h2>${contentType}</h2>
                 <p>No items found in this category.</p>
             `;
-            billPanel.style.display = 'block';
+            billPanel.style.display = 'none';
         }
     }
 
