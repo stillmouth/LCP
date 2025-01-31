@@ -100,7 +100,7 @@ async function updateMainContent(contentType) {
         // HISTORY TAB
         else if (contentType === 'History') {
             mainContent.innerHTML = `
-                <h2>Order History</h2>
+                
                 <div class="date-filters">
                     <label for="startDate">Start Date:</label>
                     <input type="date" id="startDate">
