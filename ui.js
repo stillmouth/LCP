@@ -10,7 +10,7 @@ async function updateMainContent(contentType) {
     const analytics = ["SalesOverview", "TopSelling", "Trends", "OrderHistory"];
 
     // Settings
-    const settings = ["UserProfile", "ThemeToggle"];
+    const settings = ["UserProfile", "ThemeToggle","TaxAndDiscount","PrinterConfig","Security","Help"];
 
     // Home Screen
     if (contentType === "Home") {
@@ -72,8 +72,12 @@ async function updateMainContent(contentType) {
         // Settings
         else if (settings.includes(contentType)) {
             let settingsText = {
-                "UserProfile": "Manage your profile",
-                "ThemeToggle": "Switch between light and dark themes"
+                "UserProfile": "Manage your profile, Add/Update/Delete users",
+                "ThemeToggle": "Switch between light and dark themes",
+                "TaxAndDiscount": "Set default values for tax rates and discounts",
+                "PrinterConfig": "Configure your printer",
+                "Security": "Manage security settings, Manage roles and permissions",
+                "Help": "Get help and support"
             };
 
             mainContent.innerHTML = `
@@ -179,8 +183,12 @@ async function updateLeftPanel(contentType) {
         case "Settings":
             // Render Settings-related buttons
             categoryPanel.innerHTML = `
-                <button class="category" id="User Profile" onclick="updateMainContent('User Profile')">User Profile</button>
+                <button class="category" id="UserProfile" onclick="updateMainContent('UserProfile')">User Profile</button>
                 <button class="category" id="ThemeToggle" onclick="updateMainContent('ThemeToggle')">Light/Dark Mode</button>
+                <button class="category" id="TaxAndDiscount" onclick="updateMainContent('TaxAndDiscount')">Tax and Discounts</button>
+                <button class="category" id="PrinterConfig" onclick="updateMainContent('PrinterConfig')">Printer Configuration</button>
+                <button class="category" id="Security" onclick="updateMainContent('Security')">Security</button>
+                <button class="category" id="Help" onclick="updateMainContent('Help')">Help</button>
             `;
             break;
     }
