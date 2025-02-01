@@ -104,7 +104,7 @@ async function updateMainContent(contentType) {
             
         } 
         // HISTORY TAB
-        else if (contentType === 'History') {
+        else if (contentType === 'History' || contentType === 'orderHistory') {
             
             mainContent.innerHTML = `
                 <div class="date-filters">
@@ -120,11 +120,21 @@ async function updateMainContent(contentType) {
             `;
             
         } else if (contentType === "deletedOrders") {
-            // Show placeholder labels for deleted users
             mainContent.innerHTML = `
-                <h2>Deleted Users</h2>
-                <p>List of users who have been removed from the system.</p>
+                <div class="date-filters">
+                    <label for="startDate">Start Date:</label>
+                    <input type="date" id="startDate">
+                    
+                    <label for="endDate">End Date:</label>
+                    <input type="date" id="endDate">
+                    
+                    <button id="fetchDeletedOrdersBtn">Show Deleted Orders</button>
+                </div>
+                <div id="orderHistoryDiv"></div>
             `;
+
+    // Attach event listener to the button
+    document.getElementById("fetchDeletedOrdersBtn").addEventListener("click", fetchDeletedOrders);
         } 
         //MENU TAB
         else if (contentType === "Menu") {
