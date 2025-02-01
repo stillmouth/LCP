@@ -16,7 +16,7 @@ function fetchOrderHistory() {
 ipcRenderer.on("order-history-response", (event, data) => {
     console.log("Received order history:", data);
     const orders = data.orders;
-    const orderHistoryDiv = document.getElementById("orderHistory");
+    const orderHistoryDiv = document.getElementById("orderHistoryDiv");
     orderHistoryDiv.innerHTML = ""; // Clear previous content
 
     if (orders.length === 0) {

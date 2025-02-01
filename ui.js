@@ -116,9 +116,15 @@ async function updateMainContent(contentType) {
                     
                     <button onclick="fetchOrderHistory()">Show History</button>
                 </div>
-                <div id="orderHistory"></div>
+                <div id="orderHistoryDiv"></div>
             `;
             
+        } else if (contentType === "deletedOrders") {
+            // Show placeholder labels for deleted users
+            mainContent.innerHTML = `
+                <h2>Deleted Users</h2>
+                <p>List of users who have been removed from the system.</p>
+            `;
         } 
         //MENU TAB
         else if (contentType === "Menu") {
@@ -180,7 +186,8 @@ async function updateLeftPanel(contentType) {
         case "History":
             // Render History-related buttons
             categoryPanel.innerHTML = `
-                
+                <button class="category" id="orderHistory" onclick="updateMainContent('orderHistory')">Order History</button>
+                <button class="category" id="deletedOrders" onclick="updateMainContent('deletedOrders')">Deleted Orders</button>
             `;
             break;
 
