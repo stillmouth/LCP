@@ -107,6 +107,18 @@ async function updateMainContent(contentType) {
         else if (contentType === 'History') {
             
             mainContent.innerHTML = `
+                <style>
+                    .date-filters {
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                        justify-content: center;
+                        gap: 10px;
+                        text-align: center;
+                        margin: 20px auto;
+                    }
+                </style>
+
                 <div class="date-filters">
                     <label for="startDate">Start Date:</label>
                     <input type="date" id="startDate">
@@ -164,7 +176,6 @@ async function updateLeftPanel(contentType) {
             categoryPanel.innerHTML = `
                 <button class="category" id="AddItem" onclick="updateMainContent('AddItem')">Add Item</button>
                 <button class="category" id="UpdateItem" onclick="updateMainContent('UpdateItem')">Update Item</button>
-                <button class="category" id="DeleteItem" onclick="updateMainContent('DeleteItem')">Delete Item</button>
             `;
             break;
 
