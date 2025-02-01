@@ -103,16 +103,15 @@ async function updateMainContent(contentType) {
                 </div>
             `;
             
-        } else if (contentType === "TodaysOrders") {
+        } else if (contentType === 'History' || contentType === "todaysOrders") {
             mainContent.innerHTML = `
-                <h2>Todays Orders</h2>
-                <p>Sales made today</p>
+                <button onclick="fetchTodaysOrders()">Show Today's Orders</button>
+                <div id="todaysOrdersDiv"></div>
             `;
-            
         }
 
         // HISTORY TAB
-        else if (contentType === 'History' || contentType === 'orderHistory') {
+        else if (contentType === 'orderHistory') {
             
             mainContent.innerHTML = `
                 <div class="date-filters">
