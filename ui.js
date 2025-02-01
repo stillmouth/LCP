@@ -12,7 +12,7 @@ async function updateMainContent(contentType) {
     // History
 
     // Settings
-    const settings = ["UserProfile", "ThemeToggle","TaxAndDiscount","PrinterConfig","Security","Help"];
+    const settings = ["UserProfile", "ThemeToggle","TaxAndDiscount","PrinterConfig","Security","Help","EXIT"];
 
     // Home Screen
     if (contentType === "Home") {
@@ -79,9 +79,12 @@ async function updateMainContent(contentType) {
                 "TaxAndDiscount": "Set default values for tax rates and discounts",
                 "PrinterConfig": "Configure your printer",
                 "Security": "Manage security settings, Manage roles and permissions",
-                "Help": "Get help and support"
+                "Help": "Get help and support",
+                "EXIT": "EXIT"
             };
-
+            if (contentType === "EXIT") {
+                ipcRenderer.send("exit-app");
+            }
             mainContent.innerHTML = `
                 <h2>${contentType.replace(/([A-Z])/g, " $1")}</h2>
                 <p>${settingsText[contentType]}</p>
@@ -193,6 +196,7 @@ async function updateLeftPanel(contentType) {
                 <button class="category" id="PrinterConfig" onclick="updateMainContent('PrinterConfig')">Printer Configuration</button>
                 <button class="category" id="Security" onclick="updateMainContent('Security')">Security</button>
                 <button class="category" id="Help" onclick="updateMainContent('Help')">Help</button>
+                <button class="category" id="EXIT" onclick="updateMainContent('EXIT')">EXIT</button>
             `;
             break;
     }

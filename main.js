@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu, ipcMain } = require("electron");
+const { app, BrowserWindow, Menu, ipcMain, dialog } = require("electron");
 const path = require("path");
 const sqlite3 = require("sqlite3").verbose();
 
@@ -26,11 +26,27 @@ const db = new sqlite3.Database('LC.db', (err) => {
     }
 });
 
+//Close database connection
+// Function to close the database connection gracefully
+function closeDatabase() {
+    if (db) {
+        db.close((err) => {
+            if (err) {
+                console.error("Error closing database", err);
+            } else {
+                console.log("Database connection closed");
+            }
+        });
+    }
+}
+
+
 app.on("ready", () => {
     mainWindow = new BrowserWindow({
         width: 1200,
         height: 800,
         show: false, // Initially hidden until ready-to-show
+        fullscreen: true,
         webPreferences: {
             nodeIntegration: true, // Allow Node.js in the renderer process
             contextIsolation: false, // Optional: enable or disable context isolation
@@ -63,31 +79,6 @@ app.on("ready", () => {
     });
 
     // Handle database queries
-    ipcMain.handle('fetch-burgers', async () => {
-        return new Promise((resolve, reject) => {
-            db.all('SELECT * FROM MENU WHERE CATEGORY = "BURGERS"', [], (err, rows) => {
-                if (err) {
-                    console.error("Error querying database:", err.message);
-                    reject(err);
-                } else {
-                    resolve(rows);
-                }
-            });
-        });
-    });
-
-    ipcMain.handle('fetch-milkshakes', async () => {
-        return new Promise((resolve, reject) => {
-            db.all('SELECT * FROM MENU WHERE CATEGORY = "MILKSHAKES"', [], (err, rows) => {
-                if (err) {
-                    console.error("Error querying database:", err.message);
-                    reject(err);
-                } else {
-                    resolve(rows);
-                }
-            });
-        });
-    });
 });
 
 app.on("activate", () => {
@@ -208,4 +199,22 @@ ipcMain.handle("get-food-items", async (event, categoryName) => {
             }
         });
     });
+});
+//EXIT THE APP
+// Event listener to handle exit request
+ipcMain.on("exit-app", (event) => {
+    // Show a confirmation dialog
+    const choice = dialog.showMessageBoxSync({
+        type: "question",
+        buttons: ["Cancel", "Exit"],
+        defaultId: 1,
+        title: "Confirm Exit",
+        message: "Are you sure you want to exit?",
+    });
+
+    if (choice === 1) {
+        // Close the database connection before quitting
+        closeDatabase();
+        app.quit(); // Close the app
+    }
 });
