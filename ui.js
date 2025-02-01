@@ -2,12 +2,14 @@
 async function updateMainContent(contentType) {
     const mainContent = document.getElementById("main-content");
     const billPanel = document.getElementById("bill-panel");
-
+    billPanel.style.display = 'none'; // Hide bill panel by default for all categories 
     // Menu Management
     const menuManagement = ["AddItem", "UpdateItem", "DeleteItem"];
 
     // Analytics
-    const analytics = ["SalesOverview", "TopSelling", "Trends", "OrderHistory"];
+    const analytics = ["SalesOverview", "TopSelling", "Trends"];
+
+    // History
 
     // Settings
     const settings = ["UserProfile", "ThemeToggle","TaxAndDiscount","PrinterConfig","Security","Help"];
@@ -18,77 +20,29 @@ async function updateMainContent(contentType) {
             <h2>Home</h2>
             <p>Welcome to the default home page!</p>
         `;
-        billPanel.style.display = 'block'; // Show bill panel for Home
+        billPanel.style.display = 'block'; // Show bill panel only for Home
     } 
     // Fetch and display food items dynamically
     else {
         const foodItems = await ipcRenderer.invoke("get-food-items", contentType);
 
         if (foodItems.length > 0) {
-            mainContent.innerHTML = 
-            `<h2>${contentType}</h2>
-            <div class="food-items" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;">
-                ${foodItems 
-                    .map(
-                        (item) => 
-                        `<div class="food-item" style="border: 1px solid #ccc; padding: 10px; text-align: center;">
-                            <h3>${item.fname}<br style="line-height:5px;display:block"> ${item.veg ? "🌱" : "🍖"}</h3>
-                            <p>Price: ₹${item.cost}</p>
-                            <div class="quantity-control">
-                                <button class="decrease-quantity" data-fid="${item.fid}" 
-                                    style="font-size: 12px; padding: 2px 6px; width: 18px; height: 18px; border-radius: 4px;">-</button>
-                                <span class="quantity" id="quantity-${item.fid}">1</span>
-                                <button class="increase-quantity" data-fid="${item.fid}" 
-                                    style="font-size: 12px; padding: 2px 6px; width: 18px; height: 18px; border-radius: 4px;">+</button>
-                            </div>
-                            <button class="add-to-bill" data-fid="${item.fid}" data-fname="${item.fname}" data-price="${item.cost}"
-                            style="font-size: 17px; padding: 2px 6px; width: 55px; height: 25px; border-radius: 1px; margin-top:5px">ADD</button>
-                        </div>`
-                    )
-                    .join("")}
-            </div>`;
-        
-            billPanel.style.display = "block";
-        
-            // Add event listener to "ADD" buttons
-            const addToBillButtons = document.querySelectorAll(".add-to-bill");
-            addToBillButtons.forEach(button => {
-                button.addEventListener("click", (event) => {
-                    const itemId = event.target.getAttribute("data-fid");
-                    const itemName = event.target.getAttribute("data-fname");
-                    const price = parseFloat(event.target.getAttribute("data-price"));
-                    const quantity = parseInt(document.getElementById(`quantity-${itemId}`).textContent);
-                    addToBill(itemId, itemName, price, quantity);  // Pass quantity now
-                });
-            });
-        
-            // Add event listener to the quantity control buttons
-            const decreaseButtons = document.querySelectorAll(".decrease-quantity");
-            const increaseButtons = document.querySelectorAll(".increase-quantity");
-        
-            decreaseButtons.forEach(button => {
-                button.addEventListener("click", (event) => {
-                    const itemId = event.target.getAttribute("data-fid");
-                    const quantityElement = document.getElementById(`quantity-${itemId}`);
-                    let currentQuantity = parseInt(quantityElement.textContent);
-                    if (currentQuantity > 1) {
-                        quantityElement.textContent = currentQuantity - 1;
-                    }
-                });
-            });
-        
-            increaseButtons.forEach(button => {
-                button.addEventListener("click", (event) => {
-                    const itemId = event.target.getAttribute("data-fid");
-                    const quantityElement = document.getElementById(`quantity-${itemId}`);
-                    let currentQuantity = parseInt(quantityElement.textContent);
-                    quantityElement.textContent = currentQuantity + 1;
-                });
-            });
-        }
-        
-        
-        
+            mainContent.innerHTML = `
+                <h2>${contentType}</h2>
+                <div class="food-items">
+                    ${foodItems
+                        .map(
+                            (item) => `
+                            <div class="food-item">
+                                <h3>${item.fname} ${item.veg ? "🌱" : "🍖"}</h3>
+                                <p>Price: ₹${item.cost}</p>
+                            </div>`
+                        )
+                        .join("")}
+                </div>
+            `;
+            
+        } 
         // Menu Management
         else if (menuManagement.includes(contentType)) {
             let actionText = {
@@ -101,7 +55,7 @@ async function updateMainContent(contentType) {
                 <h2>${contentType.replace(/([A-Z])/g, " $1")}</h2>
                 <p>${actionText[contentType]}</p>
             `;
-            billPanel.style.display = 'none'; // Hide bill panel for Menu Management
+            
         } 
         // Analytics
         else if (analytics.includes(contentType)) {
@@ -115,7 +69,7 @@ async function updateMainContent(contentType) {
                 <h2>${contentType.replace(/([A-Z])/g, " $1")}</h2>
                 <p>${analyticsText[contentType]}</p>
             `;
-            billPanel.style.display = 'none'; // Hide bill panel for Analytics
+            
         } 
         // Settings
         else if (settings.includes(contentType)) {
@@ -132,7 +86,7 @@ async function updateMainContent(contentType) {
                 <h2>${contentType.replace(/([A-Z])/g, " $1")}</h2>
                 <p>${settingsText[contentType]}</p>
             `;
-            billPanel.style.display = 'none'; // Hide bill panel for Settings
+            
         } 
         // Add First Category
         else if (contentType === "AddFirstCategory") {
@@ -143,12 +97,12 @@ async function updateMainContent(contentType) {
                     </button>
                 </div>
             `;
-            billPanel.style.display = 'none'; // Hide bill panel for Add First Category
+            
         } 
         // HISTORY TAB
         else if (contentType === 'History') {
+            
             mainContent.innerHTML = `
-                
                 <div class="date-filters">
                     <label for="startDate">Start Date:</label>
                     <input type="date" id="startDate">
@@ -160,7 +114,7 @@ async function updateMainContent(contentType) {
                 </div>
                 <div id="orderHistory"></div>
             `;
-            billPanel.style.display = 'none'; // Hide bill panel for History
+            
         } 
         // Default Case
         else {
@@ -168,7 +122,7 @@ async function updateMainContent(contentType) {
                 <h2>${contentType}</h2>
                 <p>No items found in this category.</p>
             `;
-            billPanel.style.display = 'none';
+            
         }
     }
 
@@ -216,8 +170,10 @@ async function updateLeftPanel(contentType) {
             break;
 
         case "History":
-            // Render History-related buttons (currently empty)
-            categoryPanel.innerHTML = ``;
+            // Render History-related buttons
+            categoryPanel.innerHTML = `
+                
+            `;
             break;
 
         case "Categories":
