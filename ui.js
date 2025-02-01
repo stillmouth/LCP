@@ -27,25 +27,28 @@ async function updateMainContent(contentType) {
 
         if (foodItems.length > 0) {
             mainContent.innerHTML = 
-                `<h2>${contentType}</h2>
-                <div class="food-items" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;">
-                    ${foodItems
-                        .map(
-                            (item) => 
-                            `<div class="food-item" style="border: 1px solid #ccc; padding: 10px; text-align: center;">
-                                <h3>${item.fid}. ${item.fname} ${item.veg ? "🌱" : "🍖"}</h3>
-                                <p>Price: ₹${item.cost}</p>
-                                <div class="quantity-control">
-                                    <button class="decrease-quantity" data-fid="${item.fid}">-</button>
-                                    <span class="quantity" id="quantity-${item.fid}">1</span>
-                                    <button class="increase-quantity" data-fid="${item.fid}">+</button>
-                                </div>
-                                <button class="add-to-bill" data-fid="${item.fid}" data-fname="${item.fname}" data-price="${item.cost}">ADD</button>
-                            </div>`
-                        )
-                        .join("")}
-                </div>
-            `;
+            `<h2>${contentType}</h2>
+            <div class="food-items" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;">
+                ${foodItems 
+                    .map(
+                        (item) => 
+                        `<div class="food-item" style="border: 1px solid #ccc; padding: 10px; text-align: center;">
+                            <h3>${item.fname}<br style="line-height:5px;display:block"> ${item.veg ? "🌱" : "🍖"}</h3>
+                            <p>Price: ₹${item.cost}</p>
+                            <div class="quantity-control">
+                                <button class="decrease-quantity" data-fid="${item.fid}" 
+                                    style="font-size: 12px; padding: 2px 6px; width: 18px; height: 18px; border-radius: 4px;">-</button>
+                                <span class="quantity" id="quantity-${item.fid}">1</span>
+                                <button class="increase-quantity" data-fid="${item.fid}" 
+                                    style="font-size: 12px; padding: 2px 6px; width: 18px; height: 18px; border-radius: 4px;">+</button>
+                            </div>
+                            <button class="add-to-bill" data-fid="${item.fid}" data-fname="${item.fname}" data-price="${item.cost}"
+                            style="font-size: 17px; padding: 2px 6px; width: 55px; height: 25px; border-radius: 1px; margin-top:5px">ADD</button>
+                        </div>`
+                    )
+                    .join("")}
+            </div>`;
+        
             billPanel.style.display = "block";
         
             // Add event listener to "ADD" buttons
