@@ -12,10 +12,10 @@ async function updateMainContent(contentType) {
     // History
 
     // Settings
-    const settings = ["UserProfile", "ThemeToggle","TaxAndDiscount","PrinterConfig","Security","Help","Exit"];
+    const settings = ["UserProfile", "ThemeToggle","TaxAndDiscount","PrinterConfig","Security", "DeleteHistory","Help","Exit"];
 
     // Home Screen
-    if (contentType === "Home") {
+    if (contentType === "Home" || contentType === "EntryButton") {
         mainContent.innerHTML = `
             <h2>Home</h2>
             <p>Welcome to the default home page!</p>
@@ -80,6 +80,7 @@ async function updateMainContent(contentType) {
                 "TaxAndDiscount": "Set default values for tax rates and discounts",
                 "PrinterConfig": "Configure your printer",
                 "Security": "Manage security settings, Manage roles and permissions",
+                "DeleteHistory": "Delete order history",
                 "Help": "Get help and support",
                 "Exit": "Exit"
             };
@@ -217,6 +218,7 @@ async function updateLeftPanel(contentType) {
                 <button class="category" id="TaxAndDiscount" onclick="updateMainContent('TaxAndDiscount')">Tax and Discounts</button>
                 <button class="category" id="PrinterConfig" onclick="updateMainContent('PrinterConfig')">Printer Configuration</button>
                 <button class="category" id="Security" onclick="updateMainContent('Security')">Security</button>
+                <button class="category" id="DeleteHistory" onclick="updateMainContent('DeleteHistory')">Delete History</button>
                 <button class="category" id="Help" onclick="updateMainContent('Help')">Help</button>
                 <button class="category" id="Exit" onclick="updateMainContent('Exit')">Exit</button>
             `;
