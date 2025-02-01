@@ -103,9 +103,11 @@ body {
 
 /* Scrollable Bill Items List */
 #bill-items-list {
+    margin-top: 10px;
+    border:1px solid #555;
     flex-grow: 1;
     overflow-y: auto; /* Enables scrolling */
-    max-height: calc(100% - 150px); /* Ensures enough space for buttons */
+    max-height: calc(100% - 250px); /* Ensures enough space for buttons */
     padding-right: 10px; /* Prevents horizontal scrollbar */
 }
 
