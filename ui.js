@@ -41,6 +41,7 @@ async function updateMainContent(contentType) {
                         .join("")}
                 </div>
             `;
+            billPanel.style.display = 'block'; // Show bill panel only if food items are present
             
         } 
         // Menu Management
