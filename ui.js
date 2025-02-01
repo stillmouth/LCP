@@ -104,7 +104,7 @@ async function updateMainContent(contentType) {
             
         } 
         // HISTORY TAB
-        else if (contentType === 'History') {
+        else if (contentType === 'History' || contentType === 'orderHistory') {
             
             mainContent.innerHTML = `
                 <div class="date-filters">
@@ -116,9 +116,25 @@ async function updateMainContent(contentType) {
                     
                     <button onclick="fetchOrderHistory()">Show History</button>
                 </div>
-                <div id="orderHistory"></div>
+                <div id="orderHistoryDiv"></div>
             `;
             
+        } else if (contentType === "deletedOrders") {
+            mainContent.innerHTML = `
+                <div class="date-filters">
+                    <label for="startDate">Start Date:</label>
+                    <input type="date" id="startDate">
+                    
+                    <label for="endDate">End Date:</label>
+                    <input type="date" id="endDate">
+                    
+                    <button id="fetchDeletedOrdersBtn">Show Deleted Orders</button>
+                </div>
+                <div id="orderHistoryDiv"></div>
+            `;
+
+    // Attach event listener to the button
+    document.getElementById("fetchDeletedOrdersBtn").addEventListener("click", fetchDeletedOrders);
         } 
         //MENU TAB
         else if (contentType === "Menu") {
@@ -180,7 +196,8 @@ async function updateLeftPanel(contentType) {
         case "History":
             // Render History-related buttons
             categoryPanel.innerHTML = `
-                
+                <button class="category" id="orderHistory" onclick="updateMainContent('orderHistory')">Order History</button>
+                <button class="category" id="deletedOrders" onclick="updateMainContent('deletedOrders')">Deleted Orders</button>
             `;
             break;
 
