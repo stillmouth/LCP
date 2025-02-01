@@ -103,9 +103,15 @@ async function updateMainContent(contentType) {
                 </div>
             `;
             
-        } 
+        } else if (contentType === 'History' || contentType === "todaysOrders") {
+            mainContent.innerHTML = `
+                <button onclick="fetchTodaysOrders()">Show Today's Orders</button>
+                <div id="todaysOrdersDiv"></div>
+            `;
+        }
+
         // HISTORY TAB
-        else if (contentType === 'History' || contentType === 'orderHistory') {
+        else if (contentType === 'orderHistory') {
             
             mainContent.innerHTML = `
                 <div class="date-filters">
@@ -134,8 +140,8 @@ async function updateMainContent(contentType) {
                 <div id="orderHistoryDiv"></div>
             `;
 
-    // Attach event listener to the button
-    document.getElementById("fetchDeletedOrdersBtn").addEventListener("click", fetchDeletedOrders);
+            // Attach event listener to the button
+            document.getElementById("fetchDeletedOrdersBtn").addEventListener("click", fetchDeletedOrders);
         } 
         //MENU TAB
         else if (contentType === "Menu") {
@@ -197,6 +203,7 @@ async function updateLeftPanel(contentType) {
         case "History":
             // Render History-related buttons
             categoryPanel.innerHTML = `
+                <button class="category" id="TodaysOrders" onclick="updateMainContent('todaysOrders')">Todays Orders</button>
                 <button class="category" id="orderHistory" onclick="updateMainContent('orderHistory')">Order History</button>
                 <button class="category" id="deletedOrders" onclick="updateMainContent('deletedOrders')">Deleted Orders</button>
             `;

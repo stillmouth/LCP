@@ -140,6 +140,35 @@ ipcMain.on("add-category", (event, categoryName) => {
     });
 });
 
+// Fetch Today's Orders
+ipcMain.on("get-todays-orders", (event) => {
+    console.log("Fetching today's orders...");
+
+    const query = `
+        SELECT 
+            Orders.*, 
+            User.uname AS cashier_name, 
+            GROUP_CONCAT(FoodItem.fname || ' (x' || OrderDetails.quantity || ')', ', ') AS food_items
+        FROM Orders
+        JOIN User ON Orders.cashier = User.userid
+        JOIN OrderDetails ON Orders.billno = OrderDetails.orderid
+        JOIN FoodItem ON OrderDetails.foodid = FoodItem.fid
+        WHERE Orders.date = date('now', 'localtime')  -- Ensure correct format match
+        GROUP BY Orders.billno
+        ORDER BY Orders.date DESC
+    `;
+
+    db.all(query, [], (err, rows) => {
+        if (err) {
+            console.error("Error fetching today's orders:", err);
+            event.reply("todays-orders-response", { success: false, orders: [] });
+            return;
+        }
+        console.log("Today's orders fetched:", rows);
+        event.reply("todays-orders-response", { success: true, orders: rows });
+    });
+});
+
 // Listen for order history requests, retrieves the orders from the Orders table and sends them back in response
 ipcMain.on("get-order-history", (event, { startDate, endDate }) => {
     console.log("Fetching order history...");

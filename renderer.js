@@ -2,7 +2,9 @@ const { ipcRenderer } = require('electron');
 const { updateCategoryPanel } = require("./categoryHandler");
 const { fetchOrderHistory } = require("./history");
 const { fetchDeletedOrders } = require("./deletedOrdersTable");
+const { fetchTodaysOrders } = require("./todaysOrders");
 window.fetchOrderHistory = fetchOrderHistory;
+window.fetchTodaysOrders = fetchTodaysOrders;
 
 // Listen for the 'set-user-role' message from the main process
 ipcRenderer.on('set-user-role', (event, role) => {
