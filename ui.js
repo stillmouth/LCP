@@ -1,5 +1,4 @@
 // Function to handle category button clicks
-// Function to handle category button clicks
 async function updateMainContent(contentType) {
     const mainContent = document.getElementById("main-content");
     const billPanel = document.getElementById("bill-panel");
@@ -11,7 +10,7 @@ async function updateMainContent(contentType) {
     const analytics = ["SalesOverview", "TopSelling", "Trends", "OrderHistory"];
 
     // Settings
-    const settings = ["UserProfile", "ThemeToggle"];
+    const settings = ["UserProfile", "ThemeToggle","TaxAndDiscount","PrinterConfig","Security","Help"];
 
     // Home Screen
     if (contentType === "Home") {
@@ -19,7 +18,7 @@ async function updateMainContent(contentType) {
             <h2>Home</h2>
             <p>Welcome to the default home page!</p>
         `;
-        billPanel.style.display = 'block';
+        billPanel.style.display = 'block'; // Show bill panel for Home
     } 
     // Fetch and display food items dynamically
     else {
@@ -102,7 +101,7 @@ async function updateMainContent(contentType) {
                 <h2>${contentType.replace(/([A-Z])/g, " $1")}</h2>
                 <p>${actionText[contentType]}</p>
             `;
-            billPanel.style.display = 'none';
+            billPanel.style.display = 'none'; // Hide bill panel for Menu Management
         } 
         // Analytics
         else if (analytics.includes(contentType)) {
@@ -116,20 +115,24 @@ async function updateMainContent(contentType) {
                 <h2>${contentType.replace(/([A-Z])/g, " $1")}</h2>
                 <p>${analyticsText[contentType]}</p>
             `;
-            billPanel.style.display = 'none';
+            billPanel.style.display = 'none'; // Hide bill panel for Analytics
         } 
         // Settings
         else if (settings.includes(contentType)) {
             let settingsText = {
-                "UserProfile": "Manage your profile",
-                "ThemeToggle": "Switch between light and dark themes"
+                "UserProfile": "Manage your profile, Add/Update/Delete users",
+                "ThemeToggle": "Switch between light and dark themes",
+                "TaxAndDiscount": "Set default values for tax rates and discounts",
+                "PrinterConfig": "Configure your printer",
+                "Security": "Manage security settings, Manage roles and permissions",
+                "Help": "Get help and support"
             };
 
             mainContent.innerHTML = `
                 <h2>${contentType.replace(/([A-Z])/g, " $1")}</h2>
                 <p>${settingsText[contentType]}</p>
             `;
-            billPanel.style.display = 'none';
+            billPanel.style.display = 'none'; // Hide bill panel for Settings
         } 
         // Add First Category
         else if (contentType === "AddFirstCategory") {
@@ -140,12 +143,12 @@ async function updateMainContent(contentType) {
                     </button>
                 </div>
             `;
-            billPanel.style.display = 'none';
+            billPanel.style.display = 'none'; // Hide bill panel for Add First Category
         } 
         // HISTORY TAB
         else if (contentType === 'History') {
             mainContent.innerHTML = `
-                <h2>Order History</h2>
+                
                 <div class="date-filters">
                     <label for="startDate">Start Date:</label>
                     <input type="date" id="startDate">
@@ -157,6 +160,7 @@ async function updateMainContent(contentType) {
                 </div>
                 <div id="orderHistory"></div>
             `;
+            billPanel.style.display = 'none'; // Hide bill panel for History
         } 
         // Default Case
         else {
@@ -227,8 +231,12 @@ async function updateLeftPanel(contentType) {
         case "Settings":
             // Render Settings-related buttons
             categoryPanel.innerHTML = `
-                <button class="category" id="User Profile" onclick="updateMainContent('User Profile')">User Profile</button>
+                <button class="category" id="UserProfile" onclick="updateMainContent('UserProfile')">User Profile</button>
                 <button class="category" id="ThemeToggle" onclick="updateMainContent('ThemeToggle')">Light/Dark Mode</button>
+                <button class="category" id="TaxAndDiscount" onclick="updateMainContent('TaxAndDiscount')">Tax and Discounts</button>
+                <button class="category" id="PrinterConfig" onclick="updateMainContent('PrinterConfig')">Printer Configuration</button>
+                <button class="category" id="Security" onclick="updateMainContent('Security')">Security</button>
+                <button class="category" id="Help" onclick="updateMainContent('Help')">Help</button>
             `;
             break;
     }
