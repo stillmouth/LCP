@@ -10,7 +10,7 @@ async function updateMainContent(contentType) {
     const analytics = ["SalesOverview", "TopSelling", "Trends", "OrderHistory"];
 
     // Settings
-    const settings = ["UserProfile", "ThemeToggle","TaxAndDiscount","PrinterConfig","Security","Help","EXIT"];
+    const settings = ["UserProfile", "ThemeToggle","TaxAndDiscount","PrinterConfig","Security","Help","Exit"];
 
     // Home Screen
     if (contentType === "Home") {
@@ -91,6 +91,7 @@ async function updateMainContent(contentType) {
         
         // Menu Management
         else if (menuManagement.includes(contentType)) {
+
             let actionText = {
                 "AddItem": "Add an item here",
                 "UpdateItem": "Edit an existing item",
@@ -126,9 +127,9 @@ async function updateMainContent(contentType) {
                 "PrinterConfig": "Configure your printer",
                 "Security": "Manage security settings, Manage roles and permissions",
                 "Help": "Get help and support",
-                "EXIT": "EXIT"
+                "Exit": "Exit"
             };
-            if (contentType === "EXIT") {
+            if (contentType === "Exit") {
                 ipcRenderer.send("exit-app");
             }
             mainContent.innerHTML = `
@@ -165,6 +166,10 @@ async function updateMainContent(contentType) {
             `;
             billPanel.style.display = 'none'; // Hide bill panel for History
         } 
+        //MENU TAB
+        else if (contentType === "Menu") {
+            displayMenu(); // Call the function from menu.js to display menu
+        }
         // Default Case
         else {
             mainContent.innerHTML = `
@@ -240,7 +245,7 @@ async function updateLeftPanel(contentType) {
                 <button class="category" id="PrinterConfig" onclick="updateMainContent('PrinterConfig')">Printer Configuration</button>
                 <button class="category" id="Security" onclick="updateMainContent('Security')">Security</button>
                 <button class="category" id="Help" onclick="updateMainContent('Help')">Help</button>
-                <button class="category" id="EXIT" onclick="updateMainContent('EXIT')">EXIT</button>
+                <button class="category" id="Exit" onclick="updateMainContent('Exit')">Exit</button>
             `;
             break;
     }

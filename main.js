@@ -46,7 +46,7 @@ app.on("ready", () => {
         width: 1200,
         height: 800,
         show: false, // Initially hidden until ready-to-show
-        fullscreen: true,
+        fullscreen: false,
         webPreferences: {
             nodeIntegration: true, // Allow Node.js in the renderer process
             contextIsolation: false, // Optional: enable or disable context isolation
@@ -182,6 +182,37 @@ ipcMain.handle("get-categories", async () => {
         });
     });
 });
+//MENU TAB FOOD ITEMS:
+// Fetch Food Items when requested from the renderer process
+ipcMain.handle("get-menu-items", async (event) => {
+    const query = `
+        SELECT FoodItem.fid, FoodItem.fname, FoodItem.category, FoodItem.cost, FoodItem.sgst, FoodItem.cgst, Category.catname AS category_name
+        FROM FoodItem
+        JOIN Category ON FoodItem.category = Category.catid
+        WHERE FoodItem.active = 1 AND FoodItem.is_on = 1
+    `;
+    
+    try {
+        // Wrapping db.all() in a promise to use async/await correctly
+        const rows = await new Promise((resolve, reject) => {
+            db.all(query, (err, rows) => {
+                if (err) {
+                    reject(err); // Reject on error
+                } else {
+                    resolve(rows); // Resolve with rows if successful
+                }
+            });
+        });
+        
+        return rows; // Return the fetched rows to the renderer process
+    } catch (err) {
+        console.error('Error fetching food items:', err);
+        return []; // Return an empty array if an error occurs
+    }
+});
+
+
+//-------------------
 
 ipcMain.handle("get-food-items", async (event, categoryName) => {
     return new Promise((resolve, reject) => {
