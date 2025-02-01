@@ -2,12 +2,14 @@
 async function updateMainContent(contentType) {
     const mainContent = document.getElementById("main-content");
     const billPanel = document.getElementById("bill-panel");
-
+    billPanel.style.display = 'none'; // Hide bill panel by default for all categories 
     // Menu Management
     const menuManagement = ["AddItem", "UpdateItem", "DeleteItem"];
 
     // Analytics
-    const analytics = ["SalesOverview", "TopSelling", "Trends", "OrderHistory"];
+    const analytics = ["SalesOverview", "TopSelling", "Trends"];
+
+    // History
 
     // Settings
     const settings = ["UserProfile", "ThemeToggle","TaxAndDiscount","PrinterConfig","Security","Help"];
@@ -18,7 +20,7 @@ async function updateMainContent(contentType) {
             <h2>Home</h2>
             <p>Welcome to the default home page!</p>
         `;
-        billPanel.style.display = 'block'; // Show bill panel for Home
+        billPanel.style.display = 'block'; // Show bill panel only for Home
     } 
     // Fetch and display food items dynamically
     else {
@@ -39,7 +41,7 @@ async function updateMainContent(contentType) {
                         .join("")}
                 </div>
             `;
-            billPanel.style.display = "none"; // Hide bill panel for other categories
+            
         } 
         // Menu Management
         else if (menuManagement.includes(contentType)) {
@@ -53,7 +55,7 @@ async function updateMainContent(contentType) {
                 <h2>${contentType.replace(/([A-Z])/g, " $1")}</h2>
                 <p>${actionText[contentType]}</p>
             `;
-            billPanel.style.display = 'none'; // Hide bill panel for Menu Management
+            
         } 
         // Analytics
         else if (analytics.includes(contentType)) {
@@ -67,7 +69,7 @@ async function updateMainContent(contentType) {
                 <h2>${contentType.replace(/([A-Z])/g, " $1")}</h2>
                 <p>${analyticsText[contentType]}</p>
             `;
-            billPanel.style.display = 'none'; // Hide bill panel for Analytics
+            
         } 
         // Settings
         else if (settings.includes(contentType)) {
@@ -84,7 +86,7 @@ async function updateMainContent(contentType) {
                 <h2>${contentType.replace(/([A-Z])/g, " $1")}</h2>
                 <p>${settingsText[contentType]}</p>
             `;
-            billPanel.style.display = 'none'; // Hide bill panel for Settings
+            
         } 
         // Add First Category
         else if (contentType === "AddFirstCategory") {
@@ -95,12 +97,12 @@ async function updateMainContent(contentType) {
                     </button>
                 </div>
             `;
-            billPanel.style.display = 'none'; // Hide bill panel for Add First Category
+            
         } 
         // HISTORY TAB
         else if (contentType === 'History') {
+            
             mainContent.innerHTML = `
-                
                 <div class="date-filters">
                     <label for="startDate">Start Date:</label>
                     <input type="date" id="startDate">
@@ -112,7 +114,7 @@ async function updateMainContent(contentType) {
                 </div>
                 <div id="orderHistory"></div>
             `;
-            billPanel.style.display = 'none'; // Hide bill panel for History
+            
         } 
         // Default Case
         else {
@@ -120,7 +122,7 @@ async function updateMainContent(contentType) {
                 <h2>${contentType}</h2>
                 <p>No items found in this category.</p>
             `;
-            billPanel.style.display = 'none'; // Hide bill panel for Default Case
+            
         }
     }
 
@@ -168,8 +170,10 @@ async function updateLeftPanel(contentType) {
             break;
 
         case "History":
-            // Render History-related buttons (currently empty)
-            categoryPanel.innerHTML = ``;
+            // Render History-related buttons
+            categoryPanel.innerHTML = `
+                
+            `;
             break;
 
         case "Categories":
