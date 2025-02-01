@@ -2,7 +2,8 @@
 function addToBill(itemId, itemName, price, quantity) {
     if (quantity > 0) {
         const totalPrice = price * quantity;
-        const billPanel = document.getElementById("bill-panel");
+        // Get the scrollable container for bill items:
+        const billItemsList = document.getElementById("bill-items-list");
 
         let existingItem = document.getElementById(`bill-item-${itemId}`);
         if (existingItem) {
@@ -24,7 +25,8 @@ function addToBill(itemId, itemName, price, quantity) {
                 <span class="bill-total">${totalPrice.toFixed(2)}</span>
                 <button onclick="removeFromBill('${itemId}')">Remove</button>
             `;
-            billPanel.appendChild(billItemRow);
+            // Append to the scrollable container:
+            billItemsList.appendChild(billItemRow);
         }
 
         updateBillTotal();
@@ -93,10 +95,10 @@ function applyDiscount() {
 
 // Function to update the total amount of the bill
 function updateBillTotal() {
-    const billPanel = document.getElementById("bill-panel");
+    const billItemsList = document.getElementById("bill-items-list");
     let totalAmount = 0;
 
-    const billItems = billPanel.getElementsByClassName("bill-item");
+    const billItems = billItemsList.getElementsByClassName("bill-item");
     for (let item of billItems) {
         const totalPrice = parseFloat(item.querySelector(".bill-total").textContent);
         totalAmount += totalPrice;
@@ -114,6 +116,7 @@ function updateBillTotal() {
         totalElement.textContent = `Total: ${formattedTotal}`;
     }
 }
+
 
 // Function to save and print the bill
 function saveAndPrintBill() {

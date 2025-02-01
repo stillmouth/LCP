@@ -47,9 +47,10 @@
   <hr>
   <div id="total-amount">Total: Rs. 0.00</div>
 
-  <!-- Buttons Section - HOLD AND SAVE AND PRINT-->
+  <!-- Buttons Section - HOLD AND SAVE AND PRINT AND APPLY DISCOUNT -->
   <div id="bill-buttons" style="margin-top: 15px;">
     <button id='saveandprintbutton' onclick="saveAndPrintBill()">Save and Print</button>
+    <button id="applydiscountbutton" onclick="toggleDiscountInputs()">Apply Discount</button>
     <button id='holdbutton' onclick="holdBill()">Hold</button>
   </div>
 
@@ -62,12 +63,7 @@
     <input type="number" id="discount-amount" placeholder="Enter discount amount" min="0" />
   
     <button id="apply-discount-btn" onclick="applyDiscount()">Apply</button>
-</div>
-
-
-  <!-- Apply Discount Button -->
-  <button id="applydiscountbutton" onclick="toggleDiscountInputs()">Apply Discount</button>
-
+  </div>
 </div>
 
 
