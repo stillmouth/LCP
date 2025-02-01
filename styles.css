@@ -421,3 +421,74 @@ input[type="number"] {
     font-style: italic; /* Italicize the message */
     margin-top: 20px; /* Space above the message */
 }
+
+/* Center the welcome content */
+.welcome-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 80vh; /* Adjust height to push content towards the center */
+    text-align: center;
+}
+
+/* Style the welcome title */
+.welcome-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Style the entry button */
+.entry-button {
+    background-color: #ff9800; /* Warm, inviting color */
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Hover effect */
+.entry-button:hover {
+    background-color: #e68900;
+    transform: scale(1.05);
+}
+
+/* Button click effect */
+.entry-button:active {
+    transform: scale(0.95);
+}
+
+/* Style the left panel only on the welcome screen */
+.welcome-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    text-align: center;
+    background: linear-gradient(to bottom, #fff3e0, #ffcc80); /* Warm gradient */
+    padding: 20px;
+    border-radius: 10px;
+}
+
+/* Style the tagline */
+.welcome-tagline {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #6d4c41; /* Warm brown */
+    margin-bottom: 10px;
+}
+
+/* Style the illustration */
+.welcome-image {
+    width: 80%; /* Adjust size */
+    max-width: 200px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}

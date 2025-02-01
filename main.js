@@ -140,7 +140,7 @@ ipcMain.on("add-category", (event, categoryName) => {
     });
 });
 
-// Listen for order history requests
+// Listen for order history requests, retrieves the orders from the Orders table and sends them back in response
 ipcMain.on("get-order-history", (event, { startDate, endDate }) => {
     console.log("Fetching order history...");
     
@@ -166,6 +166,35 @@ ipcMain.on("get-order-history", (event, { startDate, endDate }) => {
         }
         console.log("Order history fetched:", rows); 
         event.reply("order-history-response", { success: true, orders: rows });
+    });
+});
+
+// Listens for deleted order requests, retrieves the deleted orders from the DeletedOrders table and sends records back in response
+ipcMain.on("get-deleted-orders", (event, { startDate, endDate }) => {
+    console.log("Fetching deleted orders...");
+
+    const query = `
+        SELECT 
+            DeletedOrders.*, 
+            User.uname AS cashier_name, 
+            GROUP_CONCAT(FoodItem.fname || ' (x' || DeletedOrderDetails.quantity || ')', ', ') AS food_items
+        FROM DeletedOrders
+        JOIN User ON DeletedOrders.cashier = User.userid
+        JOIN DeletedOrderDetails ON DeletedOrders.billno = DeletedOrderDetails.orderid
+        JOIN FoodItem ON DeletedOrderDetails.foodid = FoodItem.fid
+        WHERE date(DeletedOrders.date) BETWEEN date(?) AND date(?)
+        GROUP BY DeletedOrders.billno
+        ORDER BY DeletedOrders.date DESC
+    `;
+
+    db.all(query, [startDate, endDate], (err, rows) => {
+        if (err) {
+            console.error("Error fetching deleted orders:", err);
+            event.reply("fetchDeletedOrdersResponse", { success: false, orders: [] });
+            return;
+        }
+        console.log("Deleted orders fetched:", rows);
+        event.reply("deleted-orders-response", { success: true, orders: rows });
     });
 });
 

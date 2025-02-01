@@ -12,10 +12,10 @@ async function updateMainContent(contentType) {
     // History
 
     // Settings
-    const settings = ["UserProfile", "ThemeToggle","TaxAndDiscount","PrinterConfig","Security","Help","Exit"];
+    const settings = ["UserProfile", "ThemeToggle","TaxAndDiscount","PrinterConfig","Security", "DeleteHistory","Help","Exit"];
 
     // Home Screen
-    if (contentType === "Home") {
+    if (contentType === "Home" || contentType === "EntryButton") {
         mainContent.innerHTML = `
             <h2>Home</h2>
             <p>Welcome to the default home page!</p>
@@ -81,6 +81,7 @@ async function updateMainContent(contentType) {
                 "TaxAndDiscount": "Set default values for tax rates and discounts",
                 "PrinterConfig": "Configure your printer",
                 "Security": "Manage security settings, Manage roles and permissions",
+                "DeleteHistory": "Delete order history",
                 "Help": "Get help and support",
                 "Exit": "Exit"
             };
@@ -105,7 +106,7 @@ async function updateMainContent(contentType) {
             
         } 
         // HISTORY TAB
-        else if (contentType === 'History') {
+        else if (contentType === 'History' || contentType === 'orderHistory') {
             
             mainContent.innerHTML = `
                 <style>
@@ -129,9 +130,25 @@ async function updateMainContent(contentType) {
                     
                     <button onclick="fetchOrderHistory()">Show History</button>
                 </div>
-                <div id="orderHistory"></div>
+                <div id="orderHistoryDiv"></div>
             `;
             
+        } else if (contentType === "deletedOrders") {
+            mainContent.innerHTML = `
+                <div class="date-filters">
+                    <label for="startDate">Start Date:</label>
+                    <input type="date" id="startDate">
+                    
+                    <label for="endDate">End Date:</label>
+                    <input type="date" id="endDate">
+                    
+                    <button id="fetchDeletedOrdersBtn">Show Deleted Orders</button>
+                </div>
+                <div id="orderHistoryDiv"></div>
+            `;
+
+    // Attach event listener to the button
+    document.getElementById("fetchDeletedOrdersBtn").addEventListener("click", fetchDeletedOrders);
         } 
         //MENU TAB
         else if (contentType === "Menu") {
@@ -192,7 +209,8 @@ async function updateLeftPanel(contentType) {
         case "History":
             // Render History-related buttons
             categoryPanel.innerHTML = `
-                
+                <button class="category" id="orderHistory" onclick="updateMainContent('orderHistory')">Order History</button>
+                <button class="category" id="deletedOrders" onclick="updateMainContent('deletedOrders')">Deleted Orders</button>
             `;
             break;
 
@@ -212,6 +230,7 @@ async function updateLeftPanel(contentType) {
                 <button class="category" id="TaxAndDiscount" onclick="updateMainContent('TaxAndDiscount')">Tax and Discounts</button>
                 <button class="category" id="PrinterConfig" onclick="updateMainContent('PrinterConfig')">Printer Configuration</button>
                 <button class="category" id="Security" onclick="updateMainContent('Security')">Security</button>
+                <button class="category" id="DeleteHistory" onclick="updateMainContent('DeleteHistory')">Delete History</button>
                 <button class="category" id="Help" onclick="updateMainContent('Help')">Help</button>
                 <button class="category" id="Exit" onclick="updateMainContent('Exit')">Exit</button>
             `;
