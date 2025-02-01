@@ -421,3 +421,45 @@ input[type="number"] {
     font-style: italic; /* Italicize the message */
     margin-top: 20px; /* Space above the message */
 }
+
+/* Center the welcome content */
+.welcome-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 80vh; /* Adjust height to push content towards the center */
+    text-align: center;
+}
+
+/* Style the welcome title */
+.welcome-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Style the entry button */
+.entry-button {
+    background-color: #ff9800; /* Warm, inviting color */
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Hover effect */
+.entry-button:hover {
+    background-color: #e68900;
+    transform: scale(1.05);
+}
+
+/* Button click effect */
+.entry-button:active {
+    transform: scale(0.95);
+}
