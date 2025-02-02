@@ -369,7 +369,7 @@ input[type="number"] {
 }
 
 /* Order History Table */
-.order-history-table {
+.order-history-table{
     width: 100%;
     border-collapse: collapse; /* Remove space between cells */
     margin-top: 20px; /* Space above the table */
@@ -518,4 +518,16 @@ input[type="number"] {
 /* Add space below the header */
 h1 {
     margin-bottom: 20px; /* Adjust the spacing as needed */
+}
+
+.showHistoryButton {
+    padding: 8px 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+    margin-right: 40px;
 }

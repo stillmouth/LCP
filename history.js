@@ -1,4 +1,5 @@
 const { ipcRenderer } = require("electron");
+const XLSX = require("xlsx");
 
 function fetchOrderHistory() {
     const startDate = document.getElementById("startDate").value;
@@ -14,7 +15,6 @@ function fetchOrderHistory() {
 
 // Receive the order history from the main process and update the UI
 ipcRenderer.on("order-history-response", (event, data) => {
-    console.log("Received order history:", data);
     const orders = data.orders;
     const orderHistoryDiv = document.getElementById("orderHistoryDiv");
     orderHistoryDiv.innerHTML = ""; // Clear previous content
@@ -63,5 +63,33 @@ ipcRenderer.on("order-history-response", (event, data) => {
     orderHistoryDiv.innerHTML = tableHTML;
 });
 
+function exportToExcel() {
+    const table = document.querySelector(".order-history-table");
+    if (!table) {
+        ipcRenderer.send("show-excel-export-message", {
+            type: "warning",
+            title: "Export Failed",
+            message: "No data available to export.",
+        });
+        return;
+    }
+
+    // Convert table to worksheet
+    const workbook = XLSX.utils.book_new();
+    const worksheet = XLSX.utils.table_to_sheet(table);
+    XLSX.utils.book_append_sheet(workbook, worksheet, "OrderHistory");
+
+    // Save file
+    const filename = "Order_History.xlsx";
+    XLSX.writeFile(workbook, filename);
+
+    // Send success message to main process
+    ipcRenderer.send("show-excel-export-message", {
+        type: "info",
+        title: "Export Successful",
+        message: `✅ Export successful! File saved as: ${filename}\nCheck the project folder.`,
+    });
+}
+
 // Export function so it can be used in renderer.js
-module.exports = { fetchOrderHistory };
+module.exports = { fetchOrderHistory, exportToExcel };

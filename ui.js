@@ -7,7 +7,7 @@ async function updateMainContent(contentType) {
     const menuManagement = ["AddItem", "UpdateItem", "DeleteItem"];
 
     // Analytics
-    const analytics = ["SalesOverview", "TopSelling", "Trends"];
+    const analytics = ["SalesOverview", "TopSelling", "Trends","ItemSummary","SalesSummary"];
 
     // History
 
@@ -64,6 +64,8 @@ async function updateMainContent(contentType) {
                 "SalesOverview": "Daily, weekly, and monthly sales overview",
                 "TopSelling": "Best selling items",
                 "Trends": "Latest trends in sales",
+                "ItemSummary": "Summary of an item over a period of time",
+                "SalesSummary": "Summary of sales made over a period of time",
             };
 
             mainContent.innerHTML = `
@@ -123,7 +125,8 @@ async function updateMainContent(contentType) {
                     <label for="endDate">End Date:</label>
                     <input type="date" id="endDate">
                     
-                    <button onclick="fetchOrderHistory()">Show History</button>
+                    <button class="showHistoryButton" onclick="fetchOrderHistory()" >Show History</button>
+                    <button onclick="exportToExcel()">Export to Excel</button>
                 </div>
                 <div id="orderHistoryDiv"></div>
             `;
@@ -139,7 +142,8 @@ async function updateMainContent(contentType) {
                     <input type="date" id="endDate">
                     
                     <select id="categoryDropdown"></select>
-                    <button onclick="fetchCategoryWise()">Show History</button>
+                    <button class="showHistoryButton" onclick="fetchCategoryWise()">Show History</button>
+                    <button onclick="exportToExcel('.category-wise-table', 'Category_Sales.xlsx')">Export to Excel</button>
                 </div>
                 <div id="categoryWiseDiv"></div>
             `;
@@ -156,9 +160,10 @@ async function updateMainContent(contentType) {
                     <label for="endDate">End Date:</label>
                     <input type="date" id="endDate">
                     
-                    <button id="fetchDeletedOrdersBtn">Show Deleted Orders</button>
+                    <button class="showHistoryButton" id="fetchDeletedOrdersBtn">Show Deleted Orders</button>
+                    <button onclick="exportToExcel('.category-wise-table', 'Category_Sales.xlsx')">Export to Excel</button>
                 </div>
-                <div id="orderHistoryDiv"></div>
+                <div id="deletedOrdersDiv"></div>
             `;
 
             // Attach event listener to the button
@@ -218,6 +223,8 @@ async function updateLeftPanel(contentType) {
                 <button class="category" id="SalesOverview" onclick="updateMainContent('SalesOverview')">Sales Overview</button>
                 <button class="category" id="TopSelling" onclick="updateMainContent('TopSelling')">Top Selling</button>
                 <button class="category" id="Trends" onclick="updateMainContent('Trends')">Trends</button>
+                <button class="category" id="ItemSummary" onclick="updateMainContent('ItemSummary')">Item Summary</button>
+                <button class="category" id="SalesSummary" onclick="updateMainContent('SalesSummary')">Sales Summary</button>
             `;
             break;
 

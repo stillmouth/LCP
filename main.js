@@ -169,7 +169,6 @@ ipcMain.on("get-todays-orders", (event) => {
 
 // Listen for order history requests, retrieves the orders from the Orders table and sends them back in response
 ipcMain.on("get-order-history", (event, { startDate, endDate }) => {
-    console.log("Fetching order history...");
     
     const query = `
         SELECT 
@@ -191,7 +190,6 @@ ipcMain.on("get-order-history", (event, { startDate, endDate }) => {
             event.reply("fetchOrderHistoryResponse", { success: false, orders: [] });
             return;
         }
-        console.log("Order history fetched:", rows); 
         event.reply("order-history-response", { success: true, orders: rows });
     });
 });
@@ -248,7 +246,6 @@ ipcMain.on("get-category-wise", (event, { startDate, endDate, category }) => {
 
 // Listens for deleted order requests, retrieves the deleted orders from the DeletedOrders table and sends records back in response
 ipcMain.on("get-deleted-orders", (event, { startDate, endDate }) => {
-    console.log("Fetching deleted orders...");
 
     const query = `
         SELECT 
@@ -270,11 +267,17 @@ ipcMain.on("get-deleted-orders", (event, { startDate, endDate }) => {
             event.reply("fetchDeletedOrdersResponse", { success: false, orders: [] });
             return;
         }
-        console.log("Deleted orders fetched:", rows);
         event.reply("deleted-orders-response", { success: true, orders: rows });
     });
 });
 
+ipcMain.on("show-excel-export-message", (event, options) => {
+    dialog.showMessageBox({
+        type: options.type || "info",
+        title: options.title || "Notification",
+        message: options.message || "Operation completed.",
+    });
+});
 
 
 ipcMain.handle("get-categories", async () => {
