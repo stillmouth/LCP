@@ -142,8 +142,7 @@ ipcMain.on("add-category", (event, categoryName) => {
 
 // Fetch Today's Orders
 ipcMain.on("get-todays-orders", (event) => {
-    console.log("Fetching today's orders...");
-
+    
     const query = `
         SELECT 
             Orders.*, 
@@ -164,14 +163,12 @@ ipcMain.on("get-todays-orders", (event) => {
             event.reply("todays-orders-response", { success: false, orders: [] });
             return;
         }
-        console.log("Today's orders fetched:", rows);
         event.reply("todays-orders-response", { success: true, orders: rows });
     });
 });
 
 // Listen for order history requests, retrieves the orders from the Orders table and sends them back in response
 ipcMain.on("get-order-history", (event, { startDate, endDate }) => {
-    console.log("Fetching order history...");
     
     const query = `
         SELECT 
@@ -193,14 +190,62 @@ ipcMain.on("get-order-history", (event, { startDate, endDate }) => {
             event.reply("fetchOrderHistoryResponse", { success: false, orders: [] });
             return;
         }
-        console.log("Order history fetched:", rows); 
         event.reply("order-history-response", { success: true, orders: rows });
     });
 });
 
+ipcMain.on("get-categories-event", (event) => {
+
+    const query = `SELECT catid, catname FROM Category WHERE active = 1`;
+
+    db.all(query, [], (err, rows) => {
+        if (err) {
+            console.error("Error fetching categories:", err);
+            event.reply("categories-response", { success: false, categories: [] });
+            return;
+        }
+        event.reply("categories-response", { success: true, categories: rows });
+    });
+});
+
+ipcMain.on("get-category-wise", (event, { startDate, endDate, category }) => {
+    console.log("Fetching order history...");
+
+    const query = `
+        SELECT 
+            Orders.*, 
+            User.uname AS cashier_name, 
+            GROUP_CONCAT(FoodItem.fname || ' (x' || OrderDetails.quantity || ')', ', ') AS food_items
+        FROM Orders
+        JOIN User ON Orders.cashier = User.userid
+        JOIN OrderDetails ON Orders.billno = OrderDetails.orderid
+        JOIN FoodItem ON OrderDetails.foodid = FoodItem.fid
+        WHERE date(Orders.date) BETWEEN date(?) AND date(?)
+        AND Orders.billno IN (
+            SELECT DISTINCT OrderDetails.orderid 
+            FROM OrderDetails
+            JOIN FoodItem ON OrderDetails.foodid = FoodItem.fid
+            WHERE FoodItem.category = ?
+        )
+        GROUP BY Orders.billno
+        ORDER BY Orders.date DESC
+    `;
+
+    db.all(query, [startDate, endDate, category], (err, rows) => {
+        if (err) {
+            console.error("Error fetching order history:", err);
+            event.reply("category-wise-response", { success: false, orders: [] });
+            return;
+        }
+        console.log("Category wise fetched:", rows); 
+        event.reply("category-wise-response", { success: true, orders: rows });
+    });
+});
+
+
+
 // Listens for deleted order requests, retrieves the deleted orders from the DeletedOrders table and sends records back in response
 ipcMain.on("get-deleted-orders", (event, { startDate, endDate }) => {
-    console.log("Fetching deleted orders...");
 
     const query = `
         SELECT 
@@ -222,11 +267,17 @@ ipcMain.on("get-deleted-orders", (event, { startDate, endDate }) => {
             event.reply("fetchDeletedOrdersResponse", { success: false, orders: [] });
             return;
         }
-        console.log("Deleted orders fetched:", rows);
         event.reply("deleted-orders-response", { success: true, orders: rows });
     });
 });
 
+ipcMain.on("show-excel-export-message", (event, options) => {
+    dialog.showMessageBox({
+        type: options.type || "info",
+        title: options.title || "Notification",
+        message: options.message || "Operation completed.",
+    });
+});
 
 
 ipcMain.handle("get-categories", async () => {

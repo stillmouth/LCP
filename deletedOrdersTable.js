@@ -16,7 +16,7 @@ function fetchDeletedOrders() {
 ipcRenderer.on("deleted-orders-response", (event, data) => {
     console.log("Received deleted orders:", data);
     const orders = data.orders;
-    const orderHistoryDiv = document.getElementById("orderHistoryDiv");
+    const orderHistoryDiv = document.getElementById("deletedOrdersDiv");
     orderHistoryDiv.innerHTML = ""; // Clear previous content
 
     if (orders.length === 0) {

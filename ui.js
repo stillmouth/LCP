@@ -7,7 +7,7 @@ async function updateMainContent(contentType) {
     const menuManagement = ["AddItem", "UpdateItem", "DeleteItem"];
 
     // Analytics
-    const analytics = ["SalesOverview", "TopSelling", "Trends"];
+    const analytics = ["SalesOverview", "TopSelling", "Trends","ItemSummary","SalesSummary"];
 
     // History
 
@@ -64,6 +64,8 @@ async function updateMainContent(contentType) {
                 "SalesOverview": "Daily, weekly, and monthly sales overview",
                 "TopSelling": "Best selling items",
                 "Trends": "Latest trends in sales",
+                "ItemSummary": "Summary of an item over a period of time",
+                "SalesSummary": "Summary of sales made over a period of time",
             };
 
             mainContent.innerHTML = `
@@ -105,15 +107,17 @@ async function updateMainContent(contentType) {
             
         } else if (contentType === 'History' || contentType === "todaysOrders") {
             mainContent.innerHTML = `
-                <button onclick="fetchTodaysOrders()">Show Today's Orders</button>
+                <h1>Todays Orders</h1>
                 <div id="todaysOrdersDiv"></div>
             `;
+            fetchTodaysOrders(); // Automatically fetch and display orders
         }
 
         // HISTORY TAB
         else if (contentType === 'orderHistory') {
             
             mainContent.innerHTML = `
+                <h1>Order History</h1>
                 <div class="date-filters">
                     <label for="startDate">Start Date:</label>
                     <input type="date" id="startDate">
@@ -121,13 +125,15 @@ async function updateMainContent(contentType) {
                     <label for="endDate">End Date:</label>
                     <input type="date" id="endDate">
                     
-                    <button onclick="fetchOrderHistory()">Show History</button>
+                    <button class="showHistoryButton" onclick="fetchOrderHistory()" >Show History</button>
+                    <button onclick="exportToExcel()">Export to Excel</button>
                 </div>
                 <div id="orderHistoryDiv"></div>
             `;
             
-        } else if (contentType === "deletedOrders") {
+        } else if (contentType === 'categoryHistory') {
             mainContent.innerHTML = `
+                <h1>Category-wise Sales</h1>
                 <div class="date-filters">
                     <label for="startDate">Start Date:</label>
                     <input type="date" id="startDate">
@@ -135,9 +141,29 @@ async function updateMainContent(contentType) {
                     <label for="endDate">End Date:</label>
                     <input type="date" id="endDate">
                     
-                    <button id="fetchDeletedOrdersBtn">Show Deleted Orders</button>
+                    <select id="categoryDropdown"></select>
+                    <button class="showHistoryButton" onclick="fetchCategoryWise()">Show History</button>
+                    <button onclick="exportToExcel('.category-wise-table', 'Category_Sales.xlsx')">Export to Excel</button>
                 </div>
-                <div id="orderHistoryDiv"></div>
+                <div id="categoryWiseDiv"></div>
+            `;
+        
+            fetchCategories(); // Fetch categories and populate the dropdown
+        }
+         else if (contentType === "deletedOrders") {
+            mainContent.innerHTML = `
+                <h1>Deleted Orders</h1>
+                <div class="date-filters">
+                    <label for="startDate">Start Date:</label>
+                    <input type="date" id="startDate">
+                    
+                    <label for="endDate">End Date:</label>
+                    <input type="date" id="endDate">
+                    
+                    <button class="showHistoryButton" id="fetchDeletedOrdersBtn">Show Deleted Orders</button>
+                    <button onclick="exportToExcel('.category-wise-table', 'Category_Sales.xlsx')">Export to Excel</button>
+                </div>
+                <div id="deletedOrdersDiv"></div>
             `;
 
             // Attach event listener to the button
@@ -197,6 +223,8 @@ async function updateLeftPanel(contentType) {
                 <button class="category" id="SalesOverview" onclick="updateMainContent('SalesOverview')">Sales Overview</button>
                 <button class="category" id="TopSelling" onclick="updateMainContent('TopSelling')">Top Selling</button>
                 <button class="category" id="Trends" onclick="updateMainContent('Trends')">Trends</button>
+                <button class="category" id="ItemSummary" onclick="updateMainContent('ItemSummary')">Item Summary</button>
+                <button class="category" id="SalesSummary" onclick="updateMainContent('SalesSummary')">Sales Summary</button>
             `;
             break;
 
@@ -205,6 +233,7 @@ async function updateLeftPanel(contentType) {
             categoryPanel.innerHTML = `
                 <button class="category" id="TodaysOrders" onclick="updateMainContent('todaysOrders')">Todays Orders</button>
                 <button class="category" id="orderHistory" onclick="updateMainContent('orderHistory')">Order History</button>
+                <button class="category" id="categoryHistory" onclick="updateMainContent('categoryHistory')">Category-wise</button>
                 <button class="category" id="deletedOrders" onclick="updateMainContent('deletedOrders')">Deleted Orders</button>
             `;
             break;
