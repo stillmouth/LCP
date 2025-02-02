@@ -105,15 +105,17 @@ async function updateMainContent(contentType) {
             
         } else if (contentType === 'History' || contentType === "todaysOrders") {
             mainContent.innerHTML = `
-                <button onclick="fetchTodaysOrders()">Show Today's Orders</button>
+                <h1>Todays Orders</h1>
                 <div id="todaysOrdersDiv"></div>
             `;
+            fetchTodaysOrders(); // Automatically fetch and display orders
         }
 
         // HISTORY TAB
         else if (contentType === 'orderHistory') {
             
             mainContent.innerHTML = `
+                <h1>Order History</h1>
                 <div class="date-filters">
                     <label for="startDate">Start Date:</label>
                     <input type="date" id="startDate">
@@ -126,8 +128,27 @@ async function updateMainContent(contentType) {
                 <div id="orderHistoryDiv"></div>
             `;
             
-        } else if (contentType === "deletedOrders") {
+        } else if (contentType === 'categoryHistory') {
             mainContent.innerHTML = `
+                <h1>Category-wise Sales</h1>
+                <div class="date-filters">
+                    <label for="startDate">Start Date:</label>
+                    <input type="date" id="startDate">
+                    
+                    <label for="endDate">End Date:</label>
+                    <input type="date" id="endDate">
+                    
+                    <select id="categoryDropdown"></select>
+                    <button onclick="fetchCategoryWise()">Show History</button>
+                </div>
+                <div id="categoryWiseDiv"></div>
+            `;
+        
+            fetchCategories(); // Fetch categories and populate the dropdown
+        }
+         else if (contentType === "deletedOrders") {
+            mainContent.innerHTML = `
+                <h1>Deleted Orders</h1>
                 <div class="date-filters">
                     <label for="startDate">Start Date:</label>
                     <input type="date" id="startDate">
@@ -205,6 +226,7 @@ async function updateLeftPanel(contentType) {
             categoryPanel.innerHTML = `
                 <button class="category" id="TodaysOrders" onclick="updateMainContent('todaysOrders')">Todays Orders</button>
                 <button class="category" id="orderHistory" onclick="updateMainContent('orderHistory')">Order History</button>
+                <button class="category" id="categoryHistory" onclick="updateMainContent('categoryHistory')">Category-wise</button>
                 <button class="category" id="deletedOrders" onclick="updateMainContent('deletedOrders')">Deleted Orders</button>
             `;
             break;
