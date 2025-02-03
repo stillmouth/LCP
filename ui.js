@@ -44,6 +44,7 @@ async function updateMainContent(contentType) {
                         .join("")}
                 </div>
             `;
+            billPanel.style.display = 'block'; // Show bill panel only if food items are present
             
         } 
         // Menu Management
@@ -123,6 +124,18 @@ async function updateMainContent(contentType) {
         else if (contentType === 'orderHistory') {
             
             mainContent.innerHTML = `
+                <style>
+                    .date-filters {
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                        justify-content: center;
+                        gap: 10px;
+                        text-align: center;
+                        margin: 20px auto;
+                    }
+                </style>
+
                 <h1>Order History</h1>
                 <div class="date-filters">
                     <label for="startDate">Start Date:</label>
@@ -219,7 +232,6 @@ async function updateLeftPanel(contentType) {
             categoryPanel.innerHTML = `
                 <button class="category" id="AddItem" onclick="updateMainContent('AddItem')">Add Item</button>
                 <button class="category" id="UpdateItem" onclick="updateMainContent('UpdateItem')">Update Item</button>
-                <button class="category" id="DeleteItem" onclick="updateMainContent('DeleteItem')">Delete Item</button>
             `;
             break;
 

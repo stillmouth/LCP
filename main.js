@@ -301,7 +301,7 @@ ipcMain.handle("get-categories", async () => {
 // Fetch Food Items when requested from the renderer process
 ipcMain.handle("get-menu-items", async (event) => {
     const query = `
-        SELECT FoodItem.fid, FoodItem.fname, FoodItem.category, FoodItem.cost, FoodItem.sgst, FoodItem.cgst, Category.catname AS category_name
+        SELECT FoodItem.fid, FoodItem.fname, FoodItem.category, FoodItem.cost, FoodItem.sgst, FoodItem.cgst,FoodItem.veg, Category.catname AS category_name
         FROM FoodItem
         JOIN Category ON FoodItem.category = Category.catid
         WHERE FoodItem.active = 1 AND FoodItem.is_on = 1
@@ -325,7 +325,20 @@ ipcMain.handle("get-menu-items", async (event) => {
         return []; // Return an empty array if an error occurs
     }
 });
-
+//DELETING MENU ITEM
+// IPC Event to Delete a Menu Item
+ipcMain.handle("delete-menu-item", async (event, fid) => {
+    return new Promise((resolve, reject) => {
+        db.run("DELETE FROM FoodItem WHERE fid = ?", [fid], function (err) {
+            if (err) {
+                console.error("Error deleting item:", err);
+                reject(err);
+            } else {
+                resolve(true);
+            }
+        });
+    });
+});
 
 //-------------------
 
