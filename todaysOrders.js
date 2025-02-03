@@ -1,30 +1,22 @@
 const { ipcRenderer } = require("electron");
 
-function fetchDeletedOrders() {
-    const startDate = document.getElementById("startDate").value;
-    const endDate = document.getElementById("endDate").value;
-
-    if (!startDate || !endDate) {
-        alert("Please select both start and end dates.");
-        return;
-    }
-
-    ipcRenderer.send("get-deleted-orders", { startDate, endDate });
+function fetchTodaysOrders() {
+    ipcRenderer.send("get-todays-orders");
 }
 
-// Receive the deleted orders response from the main process and update the UI
-ipcRenderer.on("deleted-orders-response", (event, data) => {
-    console.log("Received deleted orders:", data);
+// Receive today's orders from the main process and update the UI
+ipcRenderer.on("todays-orders-response", (event, data) => {
+    console.log("Received today's orders:", data);
     const orders = data.orders;
-    const orderHistoryDiv = document.getElementById("deletedOrdersDiv");
-    orderHistoryDiv.innerHTML = ""; // Clear previous content
+    const todaysOrdersDiv = document.getElementById("todaysOrdersDiv");
+    todaysOrdersDiv.innerHTML = ""; // Clear previous content
 
     if (orders.length === 0) {
-        orderHistoryDiv.innerHTML = "<p>No deleted orders found for the selected date range.</p>";
+        todaysOrdersDiv.innerHTML = "<p>No orders found for today.</p>";
         return;
     }
 
-    // Create a table
+    // Create a table (same layout as order history)
     let tableHTML = `
         <table class="order-history-table">
             <thead>
@@ -37,7 +29,6 @@ ipcRenderer.on("deleted-orders-response", (event, data) => {
                     <th>SGST (₹)</th>
                     <th>CGST (₹)</th>
                     <th>Tax (₹)</th>
-                    <th>Reason</th>
                     <th>Food Items</th>
                 </tr>
             </thead>
@@ -55,15 +46,14 @@ ipcRenderer.on("deleted-orders-response", (event, data) => {
                 <td>${order.sgst.toFixed(2)}</td>
                 <td>${order.cgst.toFixed(2)}</td>
                 <td>${order.tax.toFixed(2)}</td>
-                <td>${order.reason}</td>
                 <td>${order.food_items || "No items"}</td>
             </tr>
         `;
     });
 
     tableHTML += `</tbody></table>`;
-    orderHistoryDiv.innerHTML = tableHTML;
+    todaysOrdersDiv.innerHTML = tableHTML;
 });
 
-// Export function so it can be used in renderer.js
-module.exports = { fetchDeletedOrders };
+// Export function so it can be used in `renderer.js`
+module.exports = { fetchTodaysOrders };
