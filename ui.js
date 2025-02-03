@@ -1,6 +1,8 @@
+
 // Function to handle category button clicks
 async function updateMainContent(contentType) {
-    const mainContent = document.getElementById("main-content");
+    let mainContent = document.getElementById("main-content");
+    console.log('Im inside updateMainContent', contentType);
     const billPanel = document.getElementById("bill-panel");
     billPanel.style.display = 'none'; // Hide bill panel by default for all categories 
     // Menu Management
@@ -25,6 +27,7 @@ async function updateMainContent(contentType) {
     // Fetch and display food items dynamically
     else {
         const foodItems = await ipcRenderer.invoke("get-food-items", contentType);
+        console.log('Im inside else of updateMainContent', foodItems);
 
         if (foodItems.length > 0) {
             mainContent.innerHTML = `
@@ -45,6 +48,7 @@ async function updateMainContent(contentType) {
         } 
         // Menu Management
         else if (menuManagement.includes(contentType)) {
+            console.log("you big shark");
 
             let actionText = {
                 "AddItem": "Add an item here",
@@ -96,7 +100,8 @@ async function updateMainContent(contentType) {
             
         } 
         // Add First Category
-        else if (contentType === "AddFirstCategory") {
+        else if (contentType === "Categories") {
+            console.log("I'm inside categories of left panel");
             mainContent.innerHTML = `
                 <div style="display: flex; justify-content: center; align-items: center; height: 20vh;">
                     <button id="addCategoryBtn" style="background-color: green; color: white; padding: 20px 40px; font-size: 20px; border: none; cursor: pointer; width: 300px; height: 80px;">
@@ -106,6 +111,7 @@ async function updateMainContent(contentType) {
             `;
             
         } else if (contentType === 'History' || contentType === "todaysOrders") {
+            console.log("I'm inside history of left panel");
             mainContent.innerHTML = `
                 <h1>Todays Orders</h1>
                 <div id="todaysOrdersDiv"></div>
@@ -240,10 +246,9 @@ async function updateLeftPanel(contentType) {
 
         case "Categories":
             // Render category-related content when no categories exist
-            categoryPanel.innerHTML = `
-                <p style="text-align: center;" id="AddFirstCategory">No categories added</p>
-            `;
-            updateMainContent('AddFirstCategory');
+            categoryPanel.innerHTML = ''
+                
+            
             break;
 
         case "Settings":
@@ -261,3 +266,5 @@ async function updateLeftPanel(contentType) {
             break;
     }
 }
+
+module.exports = { updateMainContent};

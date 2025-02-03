@@ -1,4 +1,4 @@
-const { ipcRenderer } = require('electron');
+const { ipcRenderer, contextBridge } = require('electron');
 const { updateCategoryPanel } = require("./categoryHandler");
 const { fetchOrderHistory } = require("./history");
 const { exportToExcel } = require("./history");
@@ -6,6 +6,8 @@ const { fetchCategories } = require("./categoryDropDown");
 const { fetchCategoryWise } = require("./categoryWiseTable");
 const { fetchDeletedOrders } = require("./deletedOrdersTable");
 const { fetchTodaysOrders } = require("./todaysOrders");
+const { updateMainContent } = require("./ui");
+window.updateMainContent = updateMainContent;
 window.fetchDeletedOrders = fetchDeletedOrders;
 window.fetchOrderHistory = fetchOrderHistory;
 window.fetchTodaysOrders = fetchTodaysOrders;
@@ -13,7 +15,7 @@ window.fetchCategories = fetchCategories;
 window.fetchCategoryWise = fetchCategoryWise;
 window.exportToExcel = exportToExcel;
 window.updateCategoryPanel = updateCategoryPanel;
-
+console.log('Renderer.js loaded');
 // Listen for the 'set-user-role' message from the main process
 ipcRenderer.on('set-user-role', (event, role) => {
     const content = document.getElementById('content'); // Assuming this is the main container

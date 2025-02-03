@@ -1,7 +1,7 @@
 const { app, BrowserWindow, Menu, ipcMain, dialog } = require("electron");
 const path = require("path");
 const sqlite3 = require("sqlite3").verbose();
-
+console.log("Hello from main.js");
 let mainWindow;
 let userRole = null;
 
@@ -61,6 +61,10 @@ app.on("ready", () => {
         mainWindow.show();
     });
 
+    mainWindow.on("closed", () => {
+        mainWindow = null;
+    });
+
     Menu.setApplicationMenu(null);
 
     // Skip the login process and directly load index.html for testing
@@ -87,8 +91,10 @@ app.on("activate", () => {
             width: 1200,
             height: 800,
             webPreferences: {
-                preload: path.join(__dirname, 'preload.js'),
+                preload: path.join(__dirname, "renderer.js"), // Ensure correct path
                 contextIsolation: true,
+                enableRemoteModule: false, // Ensure security
+                nodeIntegration: false, 
             }
         });
 
